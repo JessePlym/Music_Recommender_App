@@ -1,14 +1,14 @@
 import { getSong } from "../../../lib/getSongs"
 
 type Props = {
-  token: string
+  token: string | null
 }
 
 export default function Songs({ token }: Props) {
 
   const logSongs = async () => {
     const songId = "7L9vDIDuqRUJRFxI2RBK2T"
-    console.log(await getSong(songId, token))
+    console.log(await getSong(songId, token as string))
   }
 
   return (

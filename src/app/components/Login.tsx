@@ -1,25 +1,20 @@
 "use client"
 
 import { Dispatch, SetStateAction } from "react"
-import { getAccessToken } from "../../../lib/authenticate"
+import { getAccessTokenFromAuthorizeUser } from "../../../lib/authenticate"
 
 type Props = {
+  code: string | null,
   token: string,
   setToken: Dispatch<SetStateAction<string>>
 }
 
 
-export default function Login({ setToken }: Props) {
-
-  // const CLIENT_ID = "cf2d34dc0d5845eda598df0b031e3a01"
-  // const redirectUri = "http://localhost:3000"
-  // const state = generateRandomString(16)
-  // const scope = "user-read-private%20user-read-email%20streaming"
-
-  // const authUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&scope=${scope}&redirect_uri=${redirectUri}&state=${state}`
+export default function Login({ code, setToken }: Props) {
 
   const getToken = async () => {
-    setToken(await getAccessToken())
+    if (!code) return
+    setToken(await getAccessTokenFromAuthorizeUser(code))
   } 
 
   return (

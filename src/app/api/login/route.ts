@@ -3,9 +3,6 @@ import { NextResponse } from "next/server"
 
 const CLIENT_ID = process.env.CLIENT_ID
 const CLIENT_SECRET = process.env.CLIENT_SECRET
-// const redirectUri = "http://localhost:3000"
-// const state = generateRandomString(16)
-// const scope = "user-read-private%20user-read-email%20streaming"
 
 export async function POST() {
   const url = "https://accounts.spotify.com/api/token"

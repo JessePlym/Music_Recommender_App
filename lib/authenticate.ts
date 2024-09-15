@@ -1,35 +1,65 @@
 
-export async function authenticateUser() {
-  // const CLIENT_ID = "cf2d34dc0d5845eda598df0b031e3a01"
-  // const redirectUri = "http://localhost:3000"
-  // const state = generateRandomString(16)
-  // const scope = "user-read-private%20user-read-email%20streaming"
 
-  // const response = await fetch(`https://accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&scope=${scope}&redirect_uri=${redirectUri}&state=${state}`)
+// const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID
+// const CLIENT_SECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET
 
-  // if (!response.ok) return
-  
-  // const data = await response.text()
-  // return data
+const CLIENT_ID = process.env.CLIENT_ID
+const CLIENT_SECRET = process.env.CLIENT_SECRET
 
-}
+// export async function getAccessTokenFromAuthorizeUser(code: string) {
+//   const grantType = "authorization_code"
+//   const redirectUri = "http://localhost:3000"
+//   const encodedString = Buffer.from(CLIENT_ID + ":" + CLIENT_SECRET).toString("base64")
 
-export async function getAccessToken() {
-  const CLIENT_ID = process.env.CLIENT_ID
-  const CLIENT_SECRET = process.env.CLIENT_SECRET
-  const grantType = "client_credentials"
+//   try {
+//     const response = await fetch("https://accounts.spotify.com/api/token", {
+//       method: "POST",
+//       body: new URLSearchParams({
+//         code: code,
+//         redirect_uri: redirectUri,
+//         grant_type: grantType
+//       }),
+//       headers: {
+//         "Content-Type": "application/x-www-form-urlencoded",
+//         "Authorization": "Basic " + encodedString
+//       }
+//     })
+//     if (!response.ok) return
+//     const data = await response.json()
+//     return data["access_token"]
+//   } catch (err) {
+//     console.log(err)
+//   }
+// }
+
+export async function getAccessTokenFromAuthorizeUser(code: string) {
+  const grantType = "authorization_code"
+  const redirectUri = "http://localhost:3000"
   const encodedString = Buffer.from(CLIENT_ID + ":" + CLIENT_SECRET).toString("base64")
 
   try {
-    const response = await fetch("http://localhost:3000/api/login", {
+    const response = await fetch("http://localhost:3000/api/auth", {
       method: "POST",
-      body: new URLSearchParams({
-        grant_type: grantType
+      body: JSON.stringify({
+        "code": code
       }),
       headers: {
-        "Authorization": "Basic " + encodedString
+        "Content-Type": "application/json",
       }
     })
+    if (!response.ok) return
+    const data = await response.json()
+    return data["token"]
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export async function getAccessToken() {
+
+  try {
+    const response = await fetch("http://localhost:3000/api/login", {
+      method: "POST"})
     if (!response.ok) return
     const data = await response.json()
     return data["token"]
