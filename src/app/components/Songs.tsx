@@ -1,14 +1,13 @@
-import { getSong } from "../../../lib/getSongs"
+"use client"
 
-type Props = {
-  token: string | undefined
-}
-
-export default function Songs({ token }: Props) {
+export default function Songs() {
 
   const logSongs = async () => {
-    const songId = "7L9vDIDuqRUJRFxI2RBK2T"
-    console.log(await getSong(songId, token as string))
+    const response = await fetch(`http://localhost:3000/api/songs/`)
+      
+    const song = await response.json()
+
+    console.log(song)
   }
 
   return (
