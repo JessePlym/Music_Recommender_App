@@ -1,7 +1,7 @@
 import { getSong } from "../../../lib/getSongs"
 
 type Props = {
-  token: string | null
+  token: string | undefined
 }
 
 export default function Songs({ token }: Props) {

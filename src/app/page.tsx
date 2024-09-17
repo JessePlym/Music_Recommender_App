@@ -1,58 +1,26 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
+import { useSession } from "next-auth/react"
 import Songs from "./components/Songs"
-import Authorize from "./components/Authorize"
-import { useRouter, useSearchParams } from "next/navigation"
-import { getAccessTokenFromAuthorizeUser } from "../../lib/authenticate"
+import Player from "./components/Player"
+import { tracks } from "../../trackUris"
 
 export default function Home() {
-  const [accessToken, setAccessToken] = useState<string | null>(null)
-  const params = useSearchParams()
-  const code  = params.get("code")
-  const router = useRouter()
-
-  
-
-  useEffect(() => {
-    const getToken = async () => {
-      const storedToken = localStorage.getItem("access_token")
-      if (!code) {
-        return
-      }
-
-      if (storedToken) {
-        setAccessToken(storedToken)
-        return
-      }
-
-      const token = await getAccessTokenFromAuthorizeUser(code)
-      
-      if (token) {
-        localStorage.setItem("access_token", token)
-        setAccessToken(token)
-      }
-    }
-    getToken()
-    return () => {
-      if (code) {
-        router.replace("/")
-      }
-    }
-  }, [code])
-
+  const { data: session } = useSession()
+  const accessToken: string | undefined = session?.accessToken
+  const [playingTrack, setPlayingTrack] = useState<Track[]>(tracks)
 
   return (
     <>
       <main className="min-h-screen mx-auto flex-col justify-between">
         <div>Music Recommender App</div>
-        <p>Code: {code}</p>
         <p>Token: {accessToken}</p>
         <br />
         <div className="flex gap-2">
           <Songs token={accessToken} />
-          { (!accessToken) && <Authorize />}
         </div>
+        { accessToken && <Player accessToken={accessToken} trackUri={playingTrack[0].uri}/>}
       </main>
     </>
   )
