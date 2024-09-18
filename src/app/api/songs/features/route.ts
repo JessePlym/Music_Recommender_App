@@ -4,27 +4,26 @@ import { NextRequest, NextResponse } from "next/server"
 const secret = process.env.NEXTAUTH_SECRET as string
 
 export async function GET(req: NextRequest) {
-
+  console.log("Fetch triggered")
   const token = await getToken({ req, secret})
-  const songId = "7L9vDIDuqRUJRFxI2RBK2T"
+  const id = req.url.slice(req.url.lastIndexOf("?") + 1)
+
+  if (!id) return
+
   if (!token) {
     return NextResponse.json({ "message": "Unauthorized"})
   }
   const accessToken = token.accessToken
 
   try {
-    const response = await fetch(`https://api.spotify.com/v1/tracks/${songId}`, {
+    const response = await fetch(`https://api.spotify.com/v1/audio-features/${id}`, {
       method: "GET",
       headers: {
         "Authorization": "Bearer " + accessToken
       }
     })
-    if (!response.ok) {
-      console.log(response)
-      return
-    }
+    if (!response.ok) return
     const data = await response.json()
-    console.log(data)
     return NextResponse.json(data)
   } catch (err) {
     console.log(err)

@@ -12,6 +12,12 @@ export const options: NextAuthOptions = {
       }
     })
   ],
+  session: {
+    strategy: "jwt"
+  },
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET
+  },
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
