@@ -2,15 +2,17 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { FaWrench } from "react-icons/fa"
+import { FaWrench, FaSignOutAlt } from "react-icons/fa"
 import useWindowSize from "../hooks/useWindowSize"
+import { useSession } from "next-auth/react"
 
 export default function Header() {
   const [searchInput, setSearchInput] = useState("")
   const { width } = useWindowSize()
+  const { data: session } = useSession()
 
   return (
-    <header className="bg-teal-700 text-white sticky top-0 flex flex-col sm:flex-row justify-between items-center">
+    <header className="relative bg-teal-700 text-white top-0 z-20 flex flex-col sm:flex-row justify-between items-center">
       { width > 1000 ? 
         <h1 className="mx-10 hidden lg:flex p-4">
           Music Recommender App
@@ -29,14 +31,23 @@ export default function Header() {
           />
         </form>
         { width > 1100 ? 
-          <div className="flex gap-6">
+          <div className="flex gap-6 items-center">
             <Link className="hover:text-slate-300" href="/">Home</Link>
-            <button>
+            <Link href="/preferences">
               <FaWrench />
-            </button>
+            </Link>
+            { session !== null && 
+              <Link href="/api/auth/signout">
+                <FaSignOutAlt />
+              </Link>
+            }
           </div>
-          : null
-        }
+          : 
+          session !== null && 
+            <Link href="/api/auth/signout">
+              <FaSignOutAlt />
+            </Link>
+          }
       </nav>
     </header>
   )
