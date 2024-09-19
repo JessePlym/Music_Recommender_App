@@ -4,36 +4,25 @@ import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 
 export default function Songs() {
-  const {data: session} = useSession()
-  const [ features, setFeatures] = useState(null)
+  const { data: session } = useSession()
 
-  useEffect(() => {
-    const getSongFeatures = async () => {
-      const songId = "7L9vDIDuqRUJRFxI2RBK2T"
-      const accessToken = session?.accessToken
-
-      try {
-        const response = await fetch(`https://api.spotify.com/v1/audio-features/${songId}`, {
+    const getRecentTracks = async () => {
+      if (session?.accessToken) {
+        const response = await fetch("http://localhost:3000/api/songs/recent", {
           method: "GET",
           headers: {
-            "Authorization": "Bearer " + accessToken
+            "Authorization": `Bearer ${session.accessToken}`
           }
         })
-        if (!response.ok) return
         const data = await response.json()
-        setFeatures(data)
         console.log(data)
-      } catch (err) {
-        console.log(err)
+      } else {
+        console.log("No token")
       }
-    }
-    getSongFeatures()
-  }, [session])
-
-    
-      
-    //const features = await response.json()
-
-    //console.log(await response.json())
-    
+      }
+    return (
+      <>
+        <button onClick={getRecentTracks}>Test</button>
+      </>
+    )
   }

@@ -7,22 +7,16 @@ import { tracks } from "../../trackUris"
 import { useRouter } from "next/navigation"
 
 export default function Home() {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const [playingTrack, setPlayingTrack] = useState<Track[]>(tracks)
-  const router = useRouter()
-
-  if (session === null) {
-    router.push("/api/auth/signin")
-  }
-  if (!session?.accessToken) {
+  
+  if (status === "loading") {
     return <main className="flex flex-col justify-center items-center mt-20">Loading...</main>
   }
 
   return (
     <>
-    {
-      session !== null &&
-        <main className="h-full mx-10 grid grid-rows-[7fr,1fr] gap-2">
+      <main className="h-full mx-10 grid grid-rows-[7fr,1fr] gap-2">
           <section className="relative bg-slate-950 mt-5 z-20 shadow-xl border border-white/80 p-2 grid grid-cols-[2fr,5fr]">
             <article className="flex flex-col gap-2 p-2">Recently Played Songs
             <ul className="text-2xl">
@@ -41,10 +35,9 @@ export default function Home() {
             </article>
           </section>
           <section className="relative bg-slate-950 z-20 shadow-xl border border-white/80 p-2 flex justify-center">
-            { session?.accessToken && <Player accessToken={session?.accessToken} trackUri={playingTrack[0].uri}/>}
+            { (status === "authenticated" && session.accessToken) ? <Player accessToken={session?.accessToken} trackUri={playingTrack[0].uri}/> : null}
           </section>
-        </main>
-    }
+      </main>
     </>
   )
 }
