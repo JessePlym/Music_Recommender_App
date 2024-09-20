@@ -1,4 +1,4 @@
-export const tracks: Track[] = 
+export const tracks:Partial<Track[]> = 
 [
   { 
     name: "Fortunate Son",

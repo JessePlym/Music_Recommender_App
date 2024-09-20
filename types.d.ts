@@ -1,4 +1,16 @@
+type Album = {
+  name: string,
+  artists: [
+    {
+      name: string
+    }
+  ]
+}
+
 type Track = {
   name: string,
-  uri: string
+  album: Album | null,
+  uri: string,
+  id: string,
+  popularity: number
 }

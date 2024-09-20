@@ -13,26 +13,20 @@ export const options: NextAuthOptions = {
       }
     })
   ],
-  session: {
-    strategy: "jwt"
-  },
-  jwt: {
-    secret: process.env.NEXTAUTH_SECRET
-  },
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
         token.accessToken = account.access_token
         token.refreshToken = account.refresh_token
-        token.expires_at = account.expires_at
+        token.expires_at = Date.now() + (24 * 60 * 60 * 1000)
       }
+      //if (Date.now() < token.expires_at!) return token
       return token
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken
       session.refreshToken = token.refreshToken
       session.expires_at = token.expires_at
-      console.log(session.accessToken)
       return session
     }
   }
