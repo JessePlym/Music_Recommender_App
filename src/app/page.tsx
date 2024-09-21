@@ -2,15 +2,15 @@
 
 import { useSession } from "next-auth/react"
 import Player from "./components/Player"
-import { tracks } from "../../trackUris"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { getRecentTracks } from "@/lib/getRecentTracks"
+import Image from "next/image"
 
 export default function Home() {
   const { data: session, status } = useSession()
-  const playingTracks: Track[] = tracks
   const [recentTracks, setRecentTracks] = useState<Partial<Track[]>>([])
+  const [ playingTrack, setPlayingTrack ] = useState("")
   const router = useRouter()
 
   useEffect(() => {
@@ -27,10 +27,15 @@ export default function Home() {
       if (status === "authenticated" && session.accessToken) {
         const tracks: Track[] = await getRecentTracks(session.accessToken)
         setRecentTracks(tracks)
+        setPlayingTrack(tracks[0].uri)
       }
     }
     fetchRecentTracks()
   }, [status, session?.accessToken])
+
+  const handlePlayingTrack = (uri: string) => {
+    setPlayingTrack(uri)
+  }
   
   if (status === "loading") {
     return <main className="flex flex-col justify-center items-center mt-20">Loading...</main>
@@ -38,12 +43,23 @@ export default function Home() {
 
   return (
     <>
-      <main className="h-full mx-10 grid grid-rows-[7fr,1fr] gap-2">
-          <section className="relative bg-slate-950 mt-5 z-20 shadow-xl border border-white/80 p-2 grid grid-cols-[2fr,5fr]">
+      <main className="h-full mx-10 grid grid-rows-[8fr,1fr] gap-2">
+          <section className="relative bg-slate-950 mt-5 z-20 shadow-xl border border-white/80 p-2 grid grid-cols-[3fr,5fr]">
             <article className="flex flex-col gap-2 p-2">Recently Played Songs
-            <ul className="text-xl">
+            <ul className="text-xl flex-col flex gap-2">
               { recentTracks.map(track => (
-                <li key={track?.id}>{track?.name}</li>
+                <li className="flex justify-start items-center gap-2" key={track?.id}>
+                  <Image 
+                    alt="album cover"
+                    width={40}
+                    height={40}
+                    src={track?.album.images[0].url ?? ""}
+                  />
+                  <div>
+                    <button onClick={() => handlePlayingTrack(track?.uri ?? "")}><p className="hover:text-white/80">{track?.name}</p></button>
+                    <p className="text-base">{track?.album.artists[0].name}</p>
+                  </div>
+                </li>
               ))}
               </ul>
             </article>
@@ -56,8 +72,11 @@ export default function Home() {
               </ul>
             </article>
           </section>
-          <section className="relative bg-slate-950 z-20 shadow-xl border border-white/80 p-2 flex justify-center">
-            { (status === "authenticated" && session.accessToken) ? <Player accessToken={session?.accessToken} trackUri={playingTracks[0].uri}/> : null}
+          <section className=" bg-slate-950 z-20 sticky bottom-0 shadow-xl border border-white/80 p-2 flex justify-center">
+            { (status === "authenticated" && session.accessToken && recentTracks) ? 
+                <Player accessToken={session?.accessToken} trackUri={playingTrack} recentTracks={recentTracks}/>
+              : null
+            }
           </section>
       </main>
     </>

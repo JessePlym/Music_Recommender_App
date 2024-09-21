@@ -4,12 +4,19 @@ type Album = {
     {
       name: string
     }
+  ],
+  images: [
+    {
+      url: string,
+      height: number,
+      width: number
+    }
   ]
 }
 
 type Track = {
   name: string,
-  album: Album | null,
+  album: Album,
   uri: string,
   id: string,
   popularity: number
