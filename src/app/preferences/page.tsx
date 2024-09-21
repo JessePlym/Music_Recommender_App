@@ -1,15 +1,29 @@
 "use client"
 
-import { FormEvent } from "react"
+import { FormEvent, useState } from "react"
 import { useRouter } from "next/navigation"
+import { sendPreferences } from "@/lib/sendPreferences"
 
 const KEYS = ["C", "C#/D♭", "D", "D#/E♭", "E", "F", "F#/G♭", "G", "G#/A♭", "A", "A#/B♭", "B"]
 
+const initPreference: Preference = {
+  key: 0,
+  isAcoustic: false,
+  isDance: false,
+  tempo: 100,
+  mode: 1
+}
+
 export default function Preferences() {
+  const [ preference, setPreference ] = useState<Preference>(initPreference)
   const router = useRouter()
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    
+    const responseData = await sendPreferences(preference)
+    console.log(responseData)
+    setPreference(initPreference)
     router.push("/")
   }
   return (
@@ -19,7 +33,13 @@ export default function Preferences() {
         <form className="flex flex-col gap-4 mt-4 w-full items-center p-2" onSubmit={handleSubmit}>
         <div className="flex w-full justify-between">
             <label htmlFor="key">Key</label>
-            <select className="text-black"  name="key" id="key">
+            <select 
+              className="text-black"
+              name="key"
+              id="key"
+              value={preference.key}
+              onChange={e => setPreference({...preference, key: Number(e.target.value)})}
+            >
               {
                 KEYS.map((key, index) => (
                   <option key={index} value={index}>{key}</option>
@@ -32,7 +52,9 @@ export default function Preferences() {
             <input
               className="size-8" 
               type="checkbox"
+              checked={preference.isAcoustic}
               id="acoustic"
+              onChange={e => setPreference({...preference, isAcoustic: e.target.checked})}
             />
           </div>
           <div className="flex w-full justify-between">
@@ -40,7 +62,9 @@ export default function Preferences() {
             <input 
               className="size-8"
               type="checkbox"
+              checked={preference.isDance}
               id="dance"
+              onChange={e => setPreference({...preference, isDance: e.target.checked})}
             />
           </div>
           <div className="flex w-full justify-between">
@@ -51,7 +75,9 @@ export default function Preferences() {
                 type="number"
                 min={1}
                 max={200}
+                value={preference.tempo}
                 id="tempo"
+                onChange={e => setPreference({...preference, tempo: Number(e.target.value)})}
               />
               <span className="ml-2">BPM</span>
             </div>
@@ -63,7 +89,9 @@ export default function Preferences() {
                 type="radio"
                 name="mode"
                 value={1}
+                checked={preference.mode === 1}
                 id="major"
+                onChange={e => setPreference({...preference, mode: Number(e.target.value)})}
               />
               Major
             </label>
@@ -73,8 +101,9 @@ export default function Preferences() {
                 type="radio"
                 name="mode"
                 value={0}
+                checked={preference.mode === 0}
                 id="minor"
-                
+                onChange={e => setPreference({...preference, mode: Number(e.target.value)})}
               />
               Minor
             </label>

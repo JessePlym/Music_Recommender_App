@@ -21,3 +21,11 @@ type Track = {
   id: string,
   popularity: number
 }
+
+type Preference = {
+  key: number,
+  isAcoustic: boolean,
+  isDance: boolean,
+  tempo: number,
+  mode: number
+}

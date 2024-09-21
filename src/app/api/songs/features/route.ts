@@ -29,3 +29,9 @@ export async function GET(req: NextRequest) {
     console.log(err)
   }
 }
+
+export async function POST(request: NextRequest) {
+  const songPrefence: Preference = await request.json()
+  // send prefence to db
+  return NextResponse.json(songPrefence)
+}

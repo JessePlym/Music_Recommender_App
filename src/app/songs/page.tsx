@@ -2,6 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 
+// This is a testing page
 async function getRecentTracks(accessToken: string) {
   if (accessToken) {
     const response = await fetch("http://localhost:3000/api/songs/recent", {
