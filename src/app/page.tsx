@@ -53,11 +53,11 @@ export default function Home() {
                     alt="album cover"
                     width={40}
                     height={40}
-                    src={track?.album.images[0].url ?? ""}
+                    src={track?.album?.images[0].url ?? ""}
                   />
                   <div>
                     <button onClick={() => handlePlayingTrack(track?.uri ?? "")}><p className="hover:text-white/80">{track?.name}</p></button>
-                    <p className="text-base">{track?.album.artists[0].name}</p>
+                    <p className="text-base">{track?.artist}</p>
                   </div>
                 </li>
               ))}

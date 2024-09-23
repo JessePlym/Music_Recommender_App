@@ -15,11 +15,15 @@ type Album = {
 }
 
 type Track = {
-  name: string,
-  album: Album,
-  uri: string,
   id: string,
-  popularity: number
+  name: string,
+  genre?: string | null,
+  artist: string,
+  album?: Album,
+  albumName: string,
+  uri: string,
+  popularity: number,
+  features: Feature
 }
 
 type Preference = {
@@ -28,4 +32,13 @@ type Preference = {
   isDance: boolean,
   tempo: number,
   mode: number
+}
+
+type Feature = {
+  acousticness: number,
+  danceability: number,
+  instrumentalness: number,
+  key: number,
+  mode: number,
+  tempo: number
 }

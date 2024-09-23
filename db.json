@@ -1,0 +1,568 @@
+{
+  "songs": [
+    {
+      "id": "559a",
+      "tracksWithFeatures": [
+        {
+          "name": "The Smoke",
+          "id": "7MdHoULERgejlWH0g4u43o",
+          "albumName": "Eclipse",
+          "artist": "Amorphis",
+          "popularity": 38,
+          "uri": "spotify:track:7MdHoULERgejlWH0g4u43o",
+          "features": {
+            "acousticness": 0.0000593,
+            "danceability": 0.361,
+            "instrumentalness": 0.373,
+            "key": 0,
+            "mode": 0,
+            "tempo": 103.955
+          }
+        },
+        {
+          "name": "Hell Is Living Without You",
+          "id": "1jbnDCA8DHKCoCRLqtoc3d",
+          "albumName": "Trash",
+          "artist": "Alice Cooper",
+          "popularity": 43,
+          "uri": "spotify:track:1jbnDCA8DHKCoCRLqtoc3d",
+          "features": {
+            "acousticness": 0.14,
+            "danceability": 0.243,
+            "instrumentalness": 0.0000479,
+            "key": 10,
+            "mode": 1,
+            "tempo": 143.489
+          }
+        },
+        {
+          "name": "Amaranthine",
+          "id": "3RtAMN9m7Khy4AxUV45aTd",
+          "albumName": "Amaranthe",
+          "artist": "Amaranthe",
+          "popularity": 51,
+          "uri": "spotify:track:3RtAMN9m7Khy4AxUV45aTd",
+          "features": {
+            "acousticness": 0.00414,
+            "danceability": 0.357,
+            "instrumentalness": 0.00000104,
+            "key": 3,
+            "mode": 0,
+            "tempo": 178.103
+          }
+        },
+        {
+          "name": "The End",
+          "id": "09STcjQLFcCE7TzjBmIXML",
+          "albumName": "Stoned Statues",
+          "artist": "Stoned Statues",
+          "popularity": 27,
+          "uri": "spotify:track:09STcjQLFcCE7TzjBmIXML",
+          "features": {
+            "acousticness": 0.00627,
+            "danceability": 0.243,
+            "instrumentalness": 0,
+            "key": 2,
+            "mode": 1,
+            "tempo": 190.716
+          }
+        },
+        {
+          "name": "Feuer frei!",
+          "id": "5aNH8inF5BsbThDeOLs7zs",
+          "albumName": "Mutter",
+          "artist": "Rammstein",
+          "popularity": 70,
+          "uri": "spotify:track:5aNH8inF5BsbThDeOLs7zs",
+          "features": {
+            "acousticness": 0.0000912,
+            "danceability": 0.491,
+            "instrumentalness": 0.346,
+            "key": 3,
+            "mode": 1,
+            "tempo": 95.141
+          }
+        },
+        {
+          "name": "Brother Of My Soul",
+          "id": "6Z1cBSrs4ddo2pPX3qklvH",
+          "albumName": "Devil Inside",
+          "artist": "Confidential",
+          "popularity": 17,
+          "uri": "spotify:track:6Z1cBSrs4ddo2pPX3qklvH",
+          "features": {
+            "acousticness": 0.00861,
+            "danceability": 0.455,
+            "instrumentalness": 0.0000118,
+            "key": 2,
+            "mode": 0,
+            "tempo": 90.998
+          }
+        },
+        {
+          "name": "Everytime We Touch - TEKKNO Version",
+          "id": "1RQ50jZIxLYHd09bGo5jWk",
+          "albumName": "Everytime We Touch (TEKKNO Version)",
+          "artist": "Electric Callboy",
+          "popularity": 65,
+          "uri": "spotify:track:1RQ50jZIxLYHd09bGo5jWk",
+          "features": {
+            "acousticness": 0.00049,
+            "danceability": 0.494,
+            "instrumentalness": 0,
+            "key": 7,
+            "mode": 1,
+            "tempo": 155.046
+          }
+        },
+        {
+          "name": "The Wonders Still Awaiting",
+          "id": "5iGqi4UWtdHAQSydXBPpj6",
+          "albumName": "The Wonders Still Awaiting",
+          "artist": "Xandria",
+          "popularity": 28,
+          "uri": "spotify:track:5iGqi4UWtdHAQSydXBPpj6",
+          "features": {
+            "acousticness": 0.000368,
+            "danceability": 0.383,
+            "instrumentalness": 0.00000199,
+            "key": 2,
+            "mode": 0,
+            "tempo": 145.926
+          }
+        },
+        {
+          "name": "Silver Bride - Live at Huvila",
+          "id": "4NFexrqbzHT42nvlJgQYxS",
+          "albumName": "An Evening with Friends at Huvila (Live)",
+          "artist": "Amorphis",
+          "popularity": 13,
+          "uri": "spotify:track:4NFexrqbzHT42nvlJgQYxS",
+          "features": {
+            "acousticness": 0.00226,
+            "danceability": 0.49,
+            "instrumentalness": 0.337,
+            "key": 5,
+            "mode": 0,
+            "tempo": 126.022
+          }
+        },
+        {
+          "name": "Engel",
+          "id": "5Zuboc3Cj9Ldnc8HyUnNUK",
+          "albumName": "Sehnsucht - Anniversary Edition - Remastered",
+          "artist": "Rammstein",
+          "popularity": 71,
+          "uri": "spotify:track:5Zuboc3Cj9Ldnc8HyUnNUK",
+          "features": {
+            "acousticness": 0.00115,
+            "danceability": 0.625,
+            "instrumentalness": 0.0162,
+            "key": 2,
+            "mode": 1,
+            "tempo": 96.066
+          }
+        },
+        {
+          "name": "I Am Above",
+          "id": "2t1G0rDxUY9zjML3f5mObb",
+          "albumName": "I, the Mask",
+          "artist": "In Flames",
+          "popularity": 57,
+          "uri": "spotify:track:2t1G0rDxUY9zjML3f5mObb",
+          "features": {
+            "acousticness": 0.0000312,
+            "danceability": 0.545,
+            "instrumentalness": 0.00000438,
+            "key": 10,
+            "mode": 0,
+            "tempo": 120.018
+          }
+        },
+        {
+          "name": "They Don't Care About Us",
+          "id": "2yhpa4tgc5SeM6ErBm26fK",
+          "albumName": "Love, Lies & Therapy",
+          "artist": "Saliva",
+          "popularity": 58,
+          "uri": "spotify:track:2yhpa4tgc5SeM6ErBm26fK",
+          "features": {
+            "acousticness": 0.00122,
+            "danceability": 0.596,
+            "instrumentalness": 0,
+            "key": 7,
+            "mode": 1,
+            "tempo": 89.976
+          }
+        },
+        {
+          "name": "Song Of The Sage",
+          "id": "0knUeRMVd1YnTwVQNkI4G9",
+          "albumName": "The Beginning Of Times",
+          "artist": "Amorphis",
+          "popularity": 18,
+          "uri": "spotify:track:0knUeRMVd1YnTwVQNkI4G9",
+          "features": {
+            "acousticness": 0.0000295,
+            "danceability": 0.426,
+            "instrumentalness": 0.386,
+            "key": 10,
+            "mode": 0,
+            "tempo": 122.054
+          }
+        },
+        {
+          "name": "Faint",
+          "id": "4Yf5bqU3NK4kNOypcrLYwU",
+          "albumName": "Meteora",
+          "artist": "Linkin Park",
+          "popularity": 85,
+          "uri": "spotify:track:4Yf5bqU3NK4kNOypcrLYwU",
+          "features": {
+            "acousticness": 0.127,
+            "danceability": 0.554,
+            "instrumentalness": 0,
+            "key": 4,
+            "mode": 1,
+            "tempo": 135.12
+          }
+        },
+        {
+          "name": "Lanternlight",
+          "id": "6WZImct4xSNP1EQuL2LI4z",
+          "albumName": "Yesterwynde",
+          "artist": "Nightwish",
+          "popularity": 49,
+          "uri": "spotify:track:6WZImct4xSNP1EQuL2LI4z",
+          "features": {
+            "acousticness": 0.838,
+            "danceability": 0.178,
+            "instrumentalness": 0.00208,
+            "key": 0,
+            "mode": 1,
+            "tempo": 95.453
+          }
+        },
+        {
+          "name": "The Weave",
+          "id": "0HPJEqzcaVWKQ7dx7zgi7Z",
+          "albumName": "Yesterwynde",
+          "artist": "Nightwish",
+          "popularity": 46,
+          "uri": "spotify:track:0HPJEqzcaVWKQ7dx7zgi7Z",
+          "features": {
+            "acousticness": 0.000184,
+            "danceability": 0.461,
+            "instrumentalness": 0.0228,
+            "key": 0,
+            "mode": 1,
+            "tempo": 84.995
+          }
+        },
+        {
+          "name": "Hiraeth",
+          "id": "3KnMQrmx3XtZny1Sik78Ln",
+          "albumName": "Yesterwynde",
+          "artist": "Nightwish",
+          "popularity": 46,
+          "uri": "spotify:track:3KnMQrmx3XtZny1Sik78Ln",
+          "features": {
+            "acousticness": 0.0317,
+            "danceability": 0.452,
+            "instrumentalness": 0.667,
+            "key": 9,
+            "mode": 0,
+            "tempo": 142.036
+          }
+        }
+      ]
+    },
+    {
+      "id": "2483",
+      "tracksWithFeatures": [
+        {
+          "name": "The Smoke",
+          "id": "7MdHoULERgejlWH0g4u43o",
+          "albumName": "Eclipse",
+          "artist": "Amorphis",
+          "popularity": 38,
+          "uri": "spotify:track:7MdHoULERgejlWH0g4u43o",
+          "features": {
+            "acousticness": 0.0000593,
+            "danceability": 0.361,
+            "instrumentalness": 0.373,
+            "key": 0,
+            "mode": 0,
+            "tempo": 103.955
+          }
+        },
+        {
+          "name": "Hell Is Living Without You",
+          "id": "1jbnDCA8DHKCoCRLqtoc3d",
+          "albumName": "Trash",
+          "artist": "Alice Cooper",
+          "popularity": 43,
+          "uri": "spotify:track:1jbnDCA8DHKCoCRLqtoc3d",
+          "features": {
+            "acousticness": 0.14,
+            "danceability": 0.243,
+            "instrumentalness": 0.0000479,
+            "key": 10,
+            "mode": 1,
+            "tempo": 143.489
+          }
+        },
+        {
+          "name": "Amaranthine",
+          "id": "3RtAMN9m7Khy4AxUV45aTd",
+          "albumName": "Amaranthe",
+          "artist": "Amaranthe",
+          "popularity": 51,
+          "uri": "spotify:track:3RtAMN9m7Khy4AxUV45aTd",
+          "features": {
+            "acousticness": 0.00414,
+            "danceability": 0.357,
+            "instrumentalness": 0.00000104,
+            "key": 3,
+            "mode": 0,
+            "tempo": 178.103
+          }
+        },
+        {
+          "name": "The End",
+          "id": "09STcjQLFcCE7TzjBmIXML",
+          "albumName": "Stoned Statues",
+          "artist": "Stoned Statues",
+          "popularity": 27,
+          "uri": "spotify:track:09STcjQLFcCE7TzjBmIXML",
+          "features": {
+            "acousticness": 0.00627,
+            "danceability": 0.243,
+            "instrumentalness": 0,
+            "key": 2,
+            "mode": 1,
+            "tempo": 190.716
+          }
+        },
+        {
+          "name": "Feuer frei!",
+          "id": "5aNH8inF5BsbThDeOLs7zs",
+          "albumName": "Mutter",
+          "artist": "Rammstein",
+          "popularity": 70,
+          "uri": "spotify:track:5aNH8inF5BsbThDeOLs7zs",
+          "features": {
+            "acousticness": 0.0000912,
+            "danceability": 0.491,
+            "instrumentalness": 0.346,
+            "key": 3,
+            "mode": 1,
+            "tempo": 95.141
+          }
+        },
+        {
+          "name": "Brother Of My Soul",
+          "id": "6Z1cBSrs4ddo2pPX3qklvH",
+          "albumName": "Devil Inside",
+          "artist": "Confidential",
+          "popularity": 17,
+          "uri": "spotify:track:6Z1cBSrs4ddo2pPX3qklvH",
+          "features": {
+            "acousticness": 0.00861,
+            "danceability": 0.455,
+            "instrumentalness": 0.0000118,
+            "key": 2,
+            "mode": 0,
+            "tempo": 90.998
+          }
+        },
+        {
+          "name": "Everytime We Touch - TEKKNO Version",
+          "id": "1RQ50jZIxLYHd09bGo5jWk",
+          "albumName": "Everytime We Touch (TEKKNO Version)",
+          "artist": "Electric Callboy",
+          "popularity": 65,
+          "uri": "spotify:track:1RQ50jZIxLYHd09bGo5jWk",
+          "features": {
+            "acousticness": 0.00049,
+            "danceability": 0.494,
+            "instrumentalness": 0,
+            "key": 7,
+            "mode": 1,
+            "tempo": 155.046
+          }
+        },
+        {
+          "name": "The Wonders Still Awaiting",
+          "id": "5iGqi4UWtdHAQSydXBPpj6",
+          "albumName": "The Wonders Still Awaiting",
+          "artist": "Xandria",
+          "popularity": 28,
+          "uri": "spotify:track:5iGqi4UWtdHAQSydXBPpj6",
+          "features": {
+            "acousticness": 0.000368,
+            "danceability": 0.383,
+            "instrumentalness": 0.00000199,
+            "key": 2,
+            "mode": 0,
+            "tempo": 145.926
+          }
+        },
+        {
+          "name": "Silver Bride - Live at Huvila",
+          "id": "4NFexrqbzHT42nvlJgQYxS",
+          "albumName": "An Evening with Friends at Huvila (Live)",
+          "artist": "Amorphis",
+          "popularity": 13,
+          "uri": "spotify:track:4NFexrqbzHT42nvlJgQYxS",
+          "features": {
+            "acousticness": 0.00226,
+            "danceability": 0.49,
+            "instrumentalness": 0.337,
+            "key": 5,
+            "mode": 0,
+            "tempo": 126.022
+          }
+        },
+        {
+          "name": "Engel",
+          "id": "5Zuboc3Cj9Ldnc8HyUnNUK",
+          "albumName": "Sehnsucht - Anniversary Edition - Remastered",
+          "artist": "Rammstein",
+          "popularity": 71,
+          "uri": "spotify:track:5Zuboc3Cj9Ldnc8HyUnNUK",
+          "features": {
+            "acousticness": 0.00115,
+            "danceability": 0.625,
+            "instrumentalness": 0.0162,
+            "key": 2,
+            "mode": 1,
+            "tempo": 96.066
+          }
+        },
+        {
+          "name": "I Am Above",
+          "id": "2t1G0rDxUY9zjML3f5mObb",
+          "albumName": "I, the Mask",
+          "artist": "In Flames",
+          "popularity": 57,
+          "uri": "spotify:track:2t1G0rDxUY9zjML3f5mObb",
+          "features": {
+            "acousticness": 0.0000312,
+            "danceability": 0.545,
+            "instrumentalness": 0.00000438,
+            "key": 10,
+            "mode": 0,
+            "tempo": 120.018
+          }
+        },
+        {
+          "name": "They Don't Care About Us",
+          "id": "2yhpa4tgc5SeM6ErBm26fK",
+          "albumName": "Love, Lies & Therapy",
+          "artist": "Saliva",
+          "popularity": 58,
+          "uri": "spotify:track:2yhpa4tgc5SeM6ErBm26fK",
+          "features": {
+            "acousticness": 0.00122,
+            "danceability": 0.596,
+            "instrumentalness": 0,
+            "key": 7,
+            "mode": 1,
+            "tempo": 89.976
+          }
+        },
+        {
+          "name": "Song Of The Sage",
+          "id": "0knUeRMVd1YnTwVQNkI4G9",
+          "albumName": "The Beginning Of Times",
+          "artist": "Amorphis",
+          "popularity": 18,
+          "uri": "spotify:track:0knUeRMVd1YnTwVQNkI4G9",
+          "features": {
+            "acousticness": 0.0000295,
+            "danceability": 0.426,
+            "instrumentalness": 0.386,
+            "key": 10,
+            "mode": 0,
+            "tempo": 122.054
+          }
+        },
+        {
+          "name": "Faint",
+          "id": "4Yf5bqU3NK4kNOypcrLYwU",
+          "albumName": "Meteora",
+          "artist": "Linkin Park",
+          "popularity": 85,
+          "uri": "spotify:track:4Yf5bqU3NK4kNOypcrLYwU",
+          "features": {
+            "acousticness": 0.127,
+            "danceability": 0.554,
+            "instrumentalness": 0,
+            "key": 4,
+            "mode": 1,
+            "tempo": 135.12
+          }
+        },
+        {
+          "name": "Lanternlight",
+          "id": "6WZImct4xSNP1EQuL2LI4z",
+          "albumName": "Yesterwynde",
+          "artist": "Nightwish",
+          "popularity": 49,
+          "uri": "spotify:track:6WZImct4xSNP1EQuL2LI4z",
+          "features": {
+            "acousticness": 0.838,
+            "danceability": 0.178,
+            "instrumentalness": 0.00208,
+            "key": 0,
+            "mode": 1,
+            "tempo": 95.453
+          }
+        },
+        {
+          "name": "The Weave",
+          "id": "0HPJEqzcaVWKQ7dx7zgi7Z",
+          "albumName": "Yesterwynde",
+          "artist": "Nightwish",
+          "popularity": 46,
+          "uri": "spotify:track:0HPJEqzcaVWKQ7dx7zgi7Z",
+          "features": {
+            "acousticness": 0.000184,
+            "danceability": 0.461,
+            "instrumentalness": 0.0228,
+            "key": 0,
+            "mode": 1,
+            "tempo": 84.995
+          }
+        },
+        {
+          "name": "Hiraeth",
+          "id": "3KnMQrmx3XtZny1Sik78Ln",
+          "albumName": "Yesterwynde",
+          "artist": "Nightwish",
+          "popularity": 46,
+          "uri": "spotify:track:3KnMQrmx3XtZny1Sik78Ln",
+          "features": {
+            "acousticness": 0.0317,
+            "danceability": 0.452,
+            "instrumentalness": 0.667,
+            "key": 9,
+            "mode": 0,
+            "tempo": 142.036
+          }
+        }
+      ]
+    }
+  ],
+  "preferences": [
+    {
+      "key": 2,
+      "isAcoustic": true,
+      "isDance": false,
+      "tempo": 100,
+      "mode": 1,
+      "id": "0000"
+    }
+  ]
+}

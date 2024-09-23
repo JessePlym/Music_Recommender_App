@@ -1,5 +1,6 @@
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
+import { DATA_SOURCE_URL } from "../../../../../constants"
 
 const secret = process.env.NEXTAUTH_SECRET as string
 
@@ -32,6 +33,20 @@ export async function GET(req: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const songPrefence: Preference = await request.json()
-  // send prefence to db
-  return NextResponse.json(songPrefence)
+  if (!songPrefence) return
+  const userId: string = "0000"
+  try {
+    const response = await fetch(`${DATA_SOURCE_URL}/preferences/${userId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(songPrefence)
+    })
+    if (response.ok) {
+      return NextResponse.json({ "message": "Song preferences sent successfully"})
+    }
+  } catch (err) {
+    return NextResponse.json({"message": "Could not post data"})
+  }
 }

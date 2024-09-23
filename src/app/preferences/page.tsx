@@ -21,8 +21,7 @@ export default function Preferences() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     
-    const responseData = await sendPreferences(preference)
-    console.log(responseData)
+    await sendPreferences(preference)
     setPreference(initPreference)
     router.push("/")
   }

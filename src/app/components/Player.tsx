@@ -22,6 +22,7 @@ export default function Player({ accessToken, trackUri, recentTracks}: Props) {
       token={accessToken}
       showSaveIcon
       callback={state => {
+        if (!state) return
         if (!state.isPlaying) setPlay(false)
       }}
       play={play}
