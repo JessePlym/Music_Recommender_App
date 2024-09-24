@@ -1,6 +1,8 @@
 "use client"
 
 import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
+import { HOSTNAME } from '../../../constants'
 
 // This is a testing page
 async function getRecentTracks(accessToken: string) {
@@ -23,16 +25,15 @@ async function getRecentTracks(accessToken: string) {
   }
 
 export default function Songs() {
-  const { data: session } = useSession()
-
-  const printTracks = async () => {
-    if (session?.accessToken) {
-      await getRecentTracks(session?.accessToken)
+  const [data, setData] = useState<Track[]>([])
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`${HOSTNAME}/api/home`, { method: "GET"})
+      const result = await response.json()
+      console.log(result)
     }
-  } 
-    return (
-      <>
-        <button onClick={printTracks}>Test</button>
-      </>
-    )
+    fetchData()
+  }, [])
+
+  return <div>Mongo Data</div>
   }

@@ -1,8 +1,8 @@
 import { HOSTNAME } from "../../constants"
 
-export async function sendPreferences(preference: Preference) {
+export async function sendPreferences(preference: Preference, userId: string) {
   try {
-    const response = await fetch(`${HOSTNAME}/api/songs/features`, {
+    const response = await fetch(`${HOSTNAME}/api/songs/features?id=${userId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

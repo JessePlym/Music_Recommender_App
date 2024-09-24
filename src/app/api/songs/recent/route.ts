@@ -1,6 +1,6 @@
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
-import { DATA_SOURCE_URL } from "../../../../../constants"
+import clientPromise from "@/lib/mongo"
 
 const SPOTIFY_DATA_SOURCE_URL = "https://api.spotify.com/v1"
 const LIMIT = 20
@@ -103,23 +103,21 @@ async function sendTrackFeaturesToDB(tracks: Track[], accessToken: string, userI
     }
   }
   
-  try { 
-    // delete previous history
-    const response = await fetch(`${DATA_SOURCE_URL}/songs/${userId}`, {
-      method: "DELETE"
-    })
-
-    //const payload = { tracksWithFeatures }
-    if (response.ok || response.status === 404) {
-      await fetch(`${DATA_SOURCE_URL}/songs`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({id: userId, tracksWithFeatures})
-      })
+  try {
+    const client = await clientPromise
+    const db = client.db("MusicDB")
+    
+    const collection = db.collection("songs")
+    const payload = {
+      $set: {
+        tracksWithFeatures
+      }
     }
- 
+    const filter = { id: userId}
+    const options = { upsert: true}
+  
+    await collection.updateOne(filter, payload, options)
+    
   } catch (err) {
     console.log(err)
   }

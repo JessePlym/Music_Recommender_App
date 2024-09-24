@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react"
 import { useRouter } from "next/navigation"
 import { sendPreferences } from "@/lib/sendPreferences"
+import { useSession } from "next-auth/react"
 
 const KEYS = ["C", "C#/D♭", "D", "D#/E♭", "E", "F", "F#/G♭", "G", "G#/A♭", "A", "A#/B♭", "B"]
 
@@ -15,15 +16,17 @@ const initPreference: Preference = {
 }
 
 export default function Preferences() {
+  const { data: session } = useSession()
   const [ preference, setPreference ] = useState<Preference>(initPreference)
   const router = useRouter()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    
-    await sendPreferences(preference)
-    setPreference(initPreference)
-    router.push("/")
+    if (session?.userId) {
+      await sendPreferences(preference, session?.userId)
+      setPreference(initPreference)
+      router.push("/")
+    }
   }
   return (
     <div className="flex justify-center">

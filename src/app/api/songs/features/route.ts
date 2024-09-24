@@ -1,6 +1,6 @@
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
-import { DATA_SOURCE_URL } from "../../../../../constants"
+import clientPromise from "@/lib/mongo"
 
 const secret = process.env.NEXTAUTH_SECRET as string
 
@@ -34,18 +34,30 @@ export async function GET(req: NextRequest) {
 export async function POST(request: NextRequest) {
   const songPrefence: Preference = await request.json()
   if (!songPrefence) return
-  const userId: string = "0000"
+  const url = new URL(request.url)
+  const userId = url.searchParams.get("id")
+
+  if (!userId) {
+    return NextResponse.json({ "message": "No User id provided"})
+  }
+
+  
   try {
-    const response = await fetch(`${DATA_SOURCE_URL}/preferences/${userId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(songPrefence)
-    })
-    if (response.ok) {
-      return NextResponse.json({ "message": "Song preferences sent successfully"})
+    const client = await clientPromise
+    const db = client.db("MusicDB")
+    
+    const collection = db.collection("preferences")
+    const payload = {
+      $set: {
+        ...songPrefence
+      }
     }
+    const filter = { id: userId}
+    const options = { upsert: true}
+  
+    const result = await collection.updateOne(filter, payload, options)
+
+    return NextResponse.json({"message": result})
   } catch (err) {
     return NextResponse.json({"message": "Could not post data"})
   }
