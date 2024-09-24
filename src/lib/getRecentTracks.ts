@@ -1,9 +1,9 @@
 import { HOSTNAME } from "../../constants";
 
-export async function getRecentTracks(accessToken: string): Promise<Track[]> {
+export async function getRecentTracks(accessToken: string, userId: string): Promise<Track[]> {
   try {
     if (accessToken) {
-      const response = await fetch(`${HOSTNAME}/api/songs/recent`, {
+      const response = await fetch(`${HOSTNAME}/api/songs/recent?id=${userId}`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${accessToken}`

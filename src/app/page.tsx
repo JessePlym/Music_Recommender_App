@@ -13,6 +13,7 @@ export default function Home() {
   const [ playingTrack, setPlayingTrack ] = useState("")
   const router = useRouter()
 
+  
   useEffect(() => {
     if (status === 'authenticated' && session?.expires_at) {
       const isTokenExpired = Date.now() > session.expires_at
@@ -24,14 +25,14 @@ export default function Home() {
 
   useEffect(() => {
     const fetchRecentTracks = async () => {
-      if (status === "authenticated" && session.accessToken) {
-        const tracks: Track[] = await getRecentTracks(session.accessToken)
+      if (status === "authenticated" && session.accessToken && session.userId) {
+        const tracks: Track[] = await getRecentTracks(session.accessToken, session.userId)
         setRecentTracks(tracks)
         setPlayingTrack(tracks[0].uri)
       }
     }
     fetchRecentTracks()
-  }, [status, session?.accessToken])
+  }, [status, session?.accessToken, session?.userId])
 
   const handlePlayingTrack = (uri: string) => {
     setPlayingTrack(uri)

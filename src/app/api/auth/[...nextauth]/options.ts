@@ -19,6 +19,7 @@ export const options: NextAuthOptions = {
         token.accessToken = account.access_token
         token.refreshToken = account.refresh_token
         token.expires_at = Date.now() + (24 * 60 * 60 * 1000)
+        token.userId = account.providerAccountId
       }
       return token
     },
@@ -26,6 +27,7 @@ export const options: NextAuthOptions = {
       session.accessToken = token.accessToken
       session.refreshToken = token.refreshToken
       session.expires_at = token.expires_at
+      session.userId = token.userId
       return session
     }
   }

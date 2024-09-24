@@ -11,6 +11,13 @@ export async function GET(request: NextRequest) {
   if (!jwt) return
   
   const token = jwt?.accessToken
+
+  const url = new URL(request.url)
+  const userId: string | null = url.searchParams.get("id")
+
+  if (!userId) {
+    return NextResponse.json({ "message": "No User id provided"})
+  }
   
   if (!token) {
     return NextResponse.json({ "message": "No Token"})
@@ -26,7 +33,7 @@ export async function GET(request: NextRequest) {
     if (response.ok) {
       const data = await response.json()
       const uniqueTracks = filterDuplicateTracks(data.items)
-      await sendTrackFeaturesToDB(uniqueTracks, token)
+      await sendTrackFeaturesToDB(uniqueTracks, token, userId)
       return NextResponse.json(uniqueTracks)
     } else {
       return NextResponse.json({ "status": response.status})
@@ -70,7 +77,7 @@ function filterDuplicateTracks(items: any) {
   return uniqueTracks
 }
 
-async function sendTrackFeaturesToDB(tracks: Track[], accessToken: string) {
+async function sendTrackFeaturesToDB(tracks: Track[], accessToken: string, userId: string) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const tracksWithFeatures: Track[] = tracks.map(({ album, ...rest}) => rest)
   for (const track of tracksWithFeatures) {
@@ -96,10 +103,9 @@ async function sendTrackFeaturesToDB(tracks: Track[], accessToken: string) {
     }
   }
   
-  try {
-    const id = "0" 
+  try { 
     // delete previous history
-    const response = await fetch(`${DATA_SOURCE_URL}/songs/${id}`, {
+    const response = await fetch(`${DATA_SOURCE_URL}/songs/${userId}`, {
       method: "DELETE"
     })
 
@@ -110,7 +116,7 @@ async function sendTrackFeaturesToDB(tracks: Track[], accessToken: string) {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({id: id, tracksWithFeatures})
+        body: JSON.stringify({id: userId, tracksWithFeatures})
       })
     }
  
