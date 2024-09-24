@@ -559,9 +559,9 @@
     {
       "key": 0,
       "isAcoustic": false,
+      "isInstrumental": false,
       "tempo": 100,
       "mode": 1,
-      "isInstrumental": true,
       "id": "0000"
     }
   ]
