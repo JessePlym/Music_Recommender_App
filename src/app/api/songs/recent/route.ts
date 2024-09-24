@@ -97,20 +97,23 @@ async function sendTrackFeaturesToDB(tracks: Track[], accessToken: string) {
   }
   
   try {
-    const response = await fetch(`${DATA_SOURCE_URL}/songs`)
-    const data = await response.json()
-    const tracks = data[0].tracksWithFeatures
-
-    // filterDuplicateTracks
- 
-    const payload = { tracksWithFeatures }
-    await fetch(`${DATA_SOURCE_URL}/songs`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
+    const id = "0" 
+    // delete previous history
+    const response = await fetch(`${DATA_SOURCE_URL}/songs/${id}`, {
+      method: "DELETE"
     })
+
+    //const payload = { tracksWithFeatures }
+    if (response.ok || response.status === 404) {
+      await fetch(`${DATA_SOURCE_URL}/songs`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({id: id, tracksWithFeatures})
+      })
+    }
+ 
   } catch (err) {
     console.log(err)
   }

@@ -73,10 +73,10 @@ export default function Home() {
             </article>
           </section>
           <section className=" bg-slate-950 z-20 sticky bottom-0 shadow-xl border border-white/80 p-2 flex justify-center">
-            { (status === "authenticated" && session.accessToken && recentTracks) ? 
+            {/* { (status === "authenticated" && session.accessToken && recentTracks) ? 
                 <Player accessToken={session?.accessToken} trackUri={playingTrack} recentTracks={recentTracks}/>
               : null
-            }
+            } */}
           </section>
       </main>
     </>

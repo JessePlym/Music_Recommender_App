@@ -20,7 +20,6 @@ export const options: NextAuthOptions = {
         token.refreshToken = account.refresh_token
         token.expires_at = Date.now() + (24 * 60 * 60 * 1000)
       }
-      //if (Date.now() < token.expires_at!) return token
       return token
     },
     async session({ session, token }) {
@@ -31,3 +30,4 @@ export const options: NextAuthOptions = {
     }
   }
 }
+

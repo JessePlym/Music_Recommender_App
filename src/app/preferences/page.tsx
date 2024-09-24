@@ -9,7 +9,7 @@ const KEYS = ["C", "C#/D♭", "D", "D#/E♭", "E", "F", "F#/G♭", "G", "G#/A♭
 const initPreference: Preference = {
   key: 0,
   isAcoustic: false,
-  isDance: false,
+  isInstrumental: false,
   tempo: 100,
   mode: 1
 }
@@ -57,13 +57,13 @@ export default function Preferences() {
             />
           </div>
           <div className="flex w-full justify-between">
-            <label htmlFor="dance">Dance</label>
+            <label htmlFor="instrumental">Instrumental</label>
             <input 
               className="size-8"
               type="checkbox"
-              checked={preference.isDance}
-              id="dance"
-              onChange={e => setPreference({...preference, isDance: e.target.checked})}
+              checked={preference.isInstrumental}
+              id="instrumental"
+              onChange={e => setPreference({...preference, isInstrumental: e.target.checked})}
             />
           </div>
           <div className="flex w-full justify-between">

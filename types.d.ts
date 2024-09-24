@@ -29,7 +29,7 @@ type Track = {
 type Preference = {
   key: number,
   isAcoustic: boolean,
-  isDance: boolean,
+  isInstrumental: boolean,
   tempo: number,
   mode: number
 }
