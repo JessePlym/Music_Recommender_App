@@ -4,13 +4,17 @@ import { useSession } from "next-auth/react"
 import Player from "./components/Player"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { getRecentTracks } from "@/lib/getRecentTracks"
-import Image from "next/image"
+import { getRecentTracks } from "@/lib/requests/getRecentTracks"
+import { calcAvgFeaturesOfListeningHistory } from "@/lib/functions/calcAvgFeatures"
+import { calcMostSimilarItem } from "@/lib/functions/calcMostSimilarItem"
+import SongList from "./components/SongList"
+import { getPreferences } from "@/lib/requests/getPreferences"
 
 export default function Home() {
   const { data: session, status } = useSession()
   const [recentTracks, setRecentTracks] = useState<Partial<Track[]>>([])
   const [ playingTrack, setPlayingTrack ] = useState("")
+  const [ recommendedSongs, setRecommendedSongs] = useState<Track[] | null>(null)
   const router = useRouter()
 
   
@@ -29,6 +33,11 @@ export default function Home() {
         const tracks: Track[] = await getRecentTracks(session.accessToken, session.userId)
         setRecentTracks(tracks)
         setPlayingTrack(tracks[0].uri)
+        const avg = calcAvgFeaturesOfListeningHistory(tracks)
+        const preferences: Preference = await getPreferences(session.userId)
+        if (avg) {
+          setRecommendedSongs(calcMostSimilarItem(tracks, avg, preferences, true))
+        }
       }
     }
     fetchRecentTracks()
@@ -47,30 +56,17 @@ export default function Home() {
       <main className="h-full mx-10 grid grid-rows-[8fr,1fr] gap-2">
           <section className="relative bg-slate-950 mt-5 z-20 shadow-xl border border-white/80 p-2 grid grid-cols-[3fr,5fr]">
             <article className="flex flex-col gap-2 p-2">Recently Played Songs
-            <ul className="text-xl flex-col flex gap-2">
-              { recentTracks.map(track => (
-                <li className="flex justify-start items-center gap-2" key={track?.id}>
-                  <Image 
-                    alt="album cover"
-                    width={40}
-                    height={40}
-                    src={track?.album?.images[0].url ?? ""}
-                  />
-                  <div>
-                    <button onClick={() => handlePlayingTrack(track?.uri ?? "")}><p className="hover:text-white/80">{track?.name}</p></button>
-                    <p className="text-base">{track?.artist}</p>
-                  </div>
-                </li>
-              ))}
-              </ul>
+              {
+                recentTracks !== undefined &&
+                < SongList tracks={recentTracks} handlePlayingTrack={handlePlayingTrack}/>
+              }
             </article>
             <article className="border-l border-white p-2 flex flex-col justify-start items-center gap-2">
               <h2>Song Suggestions</h2>
-              <ul className="text-2xl">
-                <li>Song 1</li>
-                <li>Song 2</li>
-                <li>Song 3</li>
-              </ul>
+              {
+                recommendedSongs !== undefined &&
+                < SongList tracks={recommendedSongs} handlePlayingTrack={handlePlayingTrack} />
+              }
             </article>
           </section>
           <section className=" bg-slate-950 z-20 sticky bottom-0 shadow-xl border border-white/80 p-2 flex justify-center">

@@ -42,3 +42,14 @@ type Feature = {
   mode: number,
   tempo: number
 }
+
+type AverageSongFeature = {
+  artist: string,
+  albumName: string
+  acousticness: number,
+  danceability: number,
+  instrumentalness: number,
+  key: number,
+  mode: number,
+  tempo: number
+}

@@ -1,4 +1,4 @@
-import { HOSTNAME } from "../../constants"
+import { HOSTNAME } from "../../../constants"
 
 export async function sendPreferences(preference: Preference, userId: string) {
   try {

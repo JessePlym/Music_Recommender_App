@@ -8,7 +8,7 @@ export async function GET() {
     const db = client.db("MusicDB")
 
     
-    const data = await db.collection("songs").find({}).toArray()
+    const data = await db.collection("preferences").find({}).toArray()
     console.log("Request done")
     return NextResponse.json(data)
    

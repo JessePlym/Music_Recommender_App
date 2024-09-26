@@ -1,9 +1,10 @@
 "use client"
 
-import { FormEvent, useState } from "react"
+import { FormEvent, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { sendPreferences } from "@/lib/sendPreferences"
+import { sendPreferences } from "@/lib/requests/sendPreferences"
 import { useSession } from "next-auth/react"
+import { getPreferences } from "@/lib/requests/getPreferences"
 
 const KEYS = ["C", "C#/D♭", "D", "D#/E♭", "E", "F", "F#/G♭", "G", "G#/A♭", "A", "A#/B♭", "B"]
 
@@ -19,6 +20,15 @@ export default function Preferences() {
   const { data: session } = useSession()
   const [ preference, setPreference ] = useState<Preference>(initPreference)
   const router = useRouter()
+
+  useEffect(() => {
+    const fetchPreferences = async () => {
+      if (session?.userId) {
+        setPreference(await getPreferences(session.userId))
+      }
+    }
+    fetchPreferences()
+  }, [session?.userId])
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -90,7 +100,7 @@ export default function Preferences() {
                 className="size-8"
                 type="radio"
                 name="mode"
-                value={1}
+                value={preference.mode}
                 checked={preference.mode === 1}
                 id="major"
                 onChange={e => setPreference({...preference, mode: Number(e.target.value)})}
@@ -102,7 +112,7 @@ export default function Preferences() {
                 className="size-8"
                 type="radio"
                 name="mode"
-                value={0}
+                value={preference.mode}
                 checked={preference.mode === 0}
                 id="minor"
                 onChange={e => setPreference({...preference, mode: Number(e.target.value)})}
