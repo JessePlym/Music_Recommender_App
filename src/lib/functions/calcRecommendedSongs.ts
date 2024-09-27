@@ -1,7 +1,7 @@
 export function calcRecommendedSongs(tracks: Track[], avgFeatures: AverageSongFeature, userPreferences: Preference[], applyPreferences: boolean) {
 
   /**
-   * Users own preferences override average feataures based on listening history
+   * Users own preferences override average features based on listening history
    * If applyPreferences is set to false, users' preferences are not taken into consideration
    */
 
@@ -27,7 +27,7 @@ export function calcRecommendedSongs(tracks: Track[], avgFeatures: AverageSongFe
     const artistDiff = track.artist !== avgFeatures.artist ? 1 : 0
     const albumDiff = track.albumName !== avgFeatures.albumName ? 1 : 0
     const keyDiff = track.features.key !== avgFeatures.key ? 1 : 0
-    const modeDiff = avgFeatures.mode !== track.features.mode ? 1 : 0
+    const modeDiff = track.features.mode !== avgFeatures.mode ? 1 : 0
 
     const acousticnessDiff = Math.abs(avgFeatures.acousticness - track.features.acousticness)
     const danceabilityDiff = Math.abs(avgFeatures.danceability - track.features.danceability)
@@ -76,10 +76,10 @@ export function calcRecommendedSongs(tracks: Track[], avgFeatures: AverageSongFe
 
     if (recommendedSongId !== undefined) {
       
-      for (let i = 0; i < tracks.length; i++) {
-        if (tracks[i].id === recommendedSongId) {
+      for (let j = 0; j < tracks.length; j++) {
+        if (tracks[j].id === recommendedSongId) {
           //console.log(tracks[i], "distance is " + distanceMap.get(recommendedSongId))
-          recommendedSongs.push(tracks[i])
+          recommendedSongs.push(tracks[j])
         }
       }
       distanceMap.delete(recommendedSongId)

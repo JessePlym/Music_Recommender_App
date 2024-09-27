@@ -6,16 +6,20 @@ import SpotifyWebPlayer from 'react-spotify-web-playback'
 type Props = {
   accessToken: string,
   trackUri: string,
-  recentTracks?: (Track | undefined)[]
+  recentTracks?: Track[]
 }
-export default function Player({ accessToken, trackUri}: Props) {
+export default function Player({ accessToken, trackUri, recentTracks}: Props) {
   const [play, setPlay] = useState(false)
+  const [recentTrackUris, setRecentTrackUris] = useState<string[]>([])
 
-  useEffect(() => setPlay(true), [trackUri])
+  useEffect(() => {
+    setPlay(true) 
+    if (recentTracks) {
+      setRecentTrackUris(recentTracks.map(track => track ? track.uri : ""))
+    }
+  }, [trackUri, recentTracks])
 
   if (!accessToken) return null
-
-  //const recentTrackUris: string[] = recentTracks.map(track => track ? track.uri : "")
 
   return (
     <SpotifyWebPlayer 
@@ -25,7 +29,7 @@ export default function Player({ accessToken, trackUri}: Props) {
         if (!state.isPlaying) setPlay(false)
       }}
       play={play}
-      uris={trackUri ? [trackUri] : []}
+      uris={trackUri ? [trackUri] : recentTrackUris}
     />
   )
 }
