@@ -1,6 +1,6 @@
 import { HOSTNAME } from "../../../constants"
 
-export async function getRecentTracks(accessToken: string, userId: string): Promise<Track[]> {
+export async function getRecentTracks(accessToken: string, userId: string): Promise<Track[] | null> {
   try {
     if (accessToken) {
       const response = await fetch(`${HOSTNAME}/api/songs/recent?id=${userId}`, {
@@ -13,10 +13,10 @@ export async function getRecentTracks(accessToken: string, userId: string): Prom
       return tracks
       } else {
         console.log("No token")
-        return []
+        return null
     }
   } catch (err) {
     console.log(err)
-    return []
+    return null
   }
 }

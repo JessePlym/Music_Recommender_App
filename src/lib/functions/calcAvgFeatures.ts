@@ -9,11 +9,12 @@ type avgFeatures = {
   tempo: number
 }
 
-export function calcAvgFeaturesOfListeningHistory(tracks: Track[]) {
+export function calcAvgFeaturesOfListeningHistory(tracks: Track[] | null) {
+
+  if (!tracks) return null
 
   const tracklistLength = tracks.length
 
-  if (tracklistLength < 1) return null
 
   const sumOfTrackFeatures = {
     totalAcousticness: 0,

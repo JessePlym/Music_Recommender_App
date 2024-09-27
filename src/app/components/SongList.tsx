@@ -1,7 +1,7 @@
 import Image from "next/image"
 
 type Props = {
-  tracks: (Track | undefined)[] | null,
+  tracks: Track[] | null,
   handlePlayingTrack: (uri: string) => void
 }
 

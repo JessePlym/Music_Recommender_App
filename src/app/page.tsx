@@ -6,13 +6,13 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { getRecentTracks } from "@/lib/requests/getRecentTracks"
 import { calcAvgFeaturesOfListeningHistory } from "@/lib/functions/calcAvgFeatures"
-import { calcMostSimilarItem } from "@/lib/functions/calcMostSimilarItem"
+import { calcRecommendedSongs } from "@/lib/functions/calcRecommendedSongs"
 import SongList from "./components/SongList"
 import { getPreferences } from "@/lib/requests/getPreferences"
 
 export default function Home() {
   const { data: session, status } = useSession()
-  const [recentTracks, setRecentTracks] = useState<Partial<Track[]>>([])
+  const [recentTracks, setRecentTracks] = useState<Track[] | null>(null)
   const [ playingTrack, setPlayingTrack ] = useState("")
   const [ recommendedSongs, setRecommendedSongs] = useState<Track[] | null>(null)
   const router = useRouter()
@@ -30,18 +30,28 @@ export default function Home() {
   useEffect(() => {
     const fetchRecentTracks = async () => {
       if (status === "authenticated" && session.accessToken && session.userId) {
-        const tracks: Track[] = await getRecentTracks(session.accessToken, session.userId)
-        setRecentTracks(tracks)
-        setPlayingTrack(tracks[0].uri)
-        const avg = calcAvgFeaturesOfListeningHistory(tracks)
-        const preferences: Preference = await getPreferences(session.userId)
-        if (avg) {
-          setRecommendedSongs(calcMostSimilarItem(tracks, avg, preferences, true))
+        const tracks: Track[] | null = await getRecentTracks(session.accessToken, session.userId)
+        if (tracks) {
+          setRecentTracks(tracks)
         }
       }
     }
     fetchRecentTracks()
   }, [status, session?.accessToken, session?.userId])
+
+  useEffect(() => {
+    const giveRecommendations = async () => {
+      if (session?.userId) {
+        const avg = calcAvgFeaturesOfListeningHistory(recentTracks)
+        const preferences: Preference[] = await getPreferences(session.userId)
+        if (avg && recentTracks) {
+          setRecommendedSongs(calcRecommendedSongs(recentTracks, avg, preferences, false))
+        }
+      }
+    }
+
+    giveRecommendations()
+  }, [playingTrack, recentTracks, session?.userId])
 
   const handlePlayingTrack = (uri: string) => {
     setPlayingTrack(uri)
@@ -57,16 +67,13 @@ export default function Home() {
           <section className="relative bg-slate-950 mt-5 z-20 shadow-xl border border-white/80 p-2 grid grid-cols-[3fr,5fr]">
             <article className="flex flex-col gap-2 p-2">Recently Played Songs
               {
-                recentTracks !== undefined &&
+                recentTracks &&
                 < SongList tracks={recentTracks} handlePlayingTrack={handlePlayingTrack}/>
               }
             </article>
             <article className="border-l border-white p-2 flex flex-col justify-start items-center gap-2">
-              <h2>Song Suggestions</h2>
-              {
-                recommendedSongs !== undefined &&
-                < SongList tracks={recommendedSongs} handlePlayingTrack={handlePlayingTrack} />
-              }
+              <h2>Song Suggestions</h2> 
+                < SongList tracks={recommendedSongs} handlePlayingTrack={handlePlayingTrack} />      
             </article>
           </section>
           <section className=" bg-slate-950 z-20 sticky bottom-0 shadow-xl border border-white/80 p-2 flex justify-center">

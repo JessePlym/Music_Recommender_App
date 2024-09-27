@@ -1,4 +1,4 @@
-export function calcMostSimilarItem(tracks: Track[], avgFeatures: AverageSongFeature, userPreferences: Preference, applyPreferences: boolean) {
+export function calcRecommendedSongs(tracks: Track[], avgFeatures: AverageSongFeature, userPreferences: Preference[], applyPreferences: boolean) {
 
   /**
    * Users own preferences override average feataures based on listening history
@@ -6,11 +6,11 @@ export function calcMostSimilarItem(tracks: Track[], avgFeatures: AverageSongFea
    */
 
   if (applyPreferences) {
-    avgFeatures.mode = userPreferences.mode ?? avgFeatures.mode
-    avgFeatures.key = userPreferences.key ?? avgFeatures.key
-    avgFeatures.tempo = userPreferences.tempo ?? avgFeatures.tempo
-    avgFeatures.acousticness = Number(userPreferences.isAcoustic ?? 0)
-    avgFeatures.instrumentalness = Number(userPreferences.isInstrumental ?? 0)
+    avgFeatures.mode = userPreferences[0].mode ?? avgFeatures.mode
+    avgFeatures.key = userPreferences[0].key ?? avgFeatures.key
+    avgFeatures.tempo = userPreferences[0].tempo ?? avgFeatures.tempo
+    avgFeatures.acousticness = Number(userPreferences[0].isAcoustic ?? 0)
+    avgFeatures.instrumentalness = Number(userPreferences[0].isInstrumental ?? 0)
   }
 
   console.log(avgFeatures)
@@ -52,7 +52,9 @@ export function calcMostSimilarItem(tracks: Track[], avgFeatures: AverageSongFea
     
   }
 
-  // find track with shortest distance
+  const recommendedSongs: Track[] = []
+
+  // find track with shortest distance helper function
 
   function findMostSimilar(map: Map<string, number>) {
     if (!map.size) return
@@ -62,17 +64,34 @@ export function calcMostSimilarItem(tracks: Track[], avgFeatures: AverageSongFea
         return key
       }
     }
+    return [...map.keys()][0]
   }
 
-  const recommendedSongId = findMostSimilar(distanceMap)
-  
-  if (recommendedSongId !== undefined) {
-    for (let i = 0; i < tracks.length; i++) {
-      if (tracks[i].id === recommendedSongId) {
-        return [tracks[i]]
+  /**
+   * Find top 5 most similar songs to recommend
+   */
+
+  for (let i = 0; i < 5; i++) {
+    const recommendedSongId = findMostSimilar(distanceMap)
+
+    if (recommendedSongId !== undefined) {
+      
+      for (let i = 0; i < tracks.length; i++) {
+        if (tracks[i].id === recommendedSongId) {
+          //console.log(tracks[i], "distance is " + distanceMap.get(recommendedSongId))
+          recommendedSongs.push(tracks[i])
+        }
       }
+      distanceMap.delete(recommendedSongId)
     }
   }
-  return null
+
+  /**
+   * Sort recommended songs array based on popularity attribute
+   */
+
+  const sortedSongs = recommendedSongs.sort((a: Track, b: Track) => b.popularity - a.popularity)
+
+  return sortedSongs
 
 }
