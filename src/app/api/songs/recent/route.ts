@@ -1,9 +1,8 @@
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
-import clientPromise from "@/lib/mongo"
 
 const SPOTIFY_DATA_SOURCE_URL = "https://api.spotify.com/v1"
-const LIMIT = 20
+const LIMIT = 50
 const secret = process.env.NEXTAUTH_SECRET as string
 
 export async function GET(request: NextRequest) {
@@ -29,11 +28,11 @@ export async function GET(request: NextRequest) {
         "Authorization": `Bearer ${token}`
       }
     })
-    console.log(response.status)
+    
     if (response.ok) {
       const data = await response.json()
       const uniqueTracks = filterDuplicateTracks(data.items)
-      await sendTrackFeaturesToDB(uniqueTracks, token, userId)
+      await getTrackFeatures(uniqueTracks, token)
       return NextResponse.json(uniqueTracks)
     } else {
       return NextResponse.json({ "status": response.status})
@@ -77,7 +76,7 @@ function filterDuplicateTracks(items: any) {
   return uniqueTracks
 }
 
-async function sendTrackFeaturesToDB(tracks: Track[], accessToken: string, userId: string) {
+async function getTrackFeatures(tracks: Track[], accessToken: string) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const tracksWithFeatures: Track[] = tracks.map(({ album, ...rest}) => rest)
   for (const track of tracksWithFeatures) {
@@ -103,22 +102,22 @@ async function sendTrackFeaturesToDB(tracks: Track[], accessToken: string, userI
     }
   }
   
-  try {
-    const client = await clientPromise
-    const db = client.db("MusicDB")
+  // try {
+  //   const client = await clientPromise
+  //   const db = client.db("MusicDB")
     
-    const collection = db.collection("songs")
-    const payload = {
-      $set: {
-        tracksWithFeatures
-      }
-    }
-    const filter = { id: userId}
-    const options = { upsert: true}
+  //   const collection = db.collection("songs")
+  //   const payload = {
+  //     $set: {
+  //       tracksWithFeatures
+  //     }
+  //   }
+  //   const filter = { id: userId}
+  //   const options = { upsert: true}
   
-    await collection.updateOne(filter, payload, options)
+  //   await collection.updateOne(filter, payload, options)
     
-  } catch (err) {
-    console.log(err)
-  }
+  // } catch (err) {
+  //   console.log(err)
+  // }
 }
