@@ -1,27 +1,29 @@
 "use client"
 
-// This is a testing page
-async function getRecentTracks(accessToken: string) {
-  if (accessToken) {
-    const response = await fetch("http://localhost:3000/api/songs/recent", {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${accessToken}`
-      }
-    })
-    const items = await response.json()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const topTracks: Track[] = items.map((item: any) => item.track.name)
-    
+import { useSession } from "next-auth/react"
 
-    console.log(topTracks)
-  } else {
-    console.log("No token")
-  }
-  }
+// This is a testing page
+
 
 export default function Songs() {
+  const { data: session } = useSession() 
   
+  async function test(accessToken: string) {
+    if (accessToken) {
+      const response = await fetch("http://localhost:3000/api/songs/song-data", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${accessToken}`
+        },
+        body: JSON.stringify(["2NPduAUeLVsfIauhRwuft1", "2UOVgpgiNTC6KK0vSC77aD"])
+      })
+      //console.log(await response.json())
+    } else {
+      console.log("No token")
+    }
+  }
 
-  return <div>Mongo Data</div>
+  return <div>
+    <button onClick={() => test(session?.accessToken ?? "")}>Test</button>
+  </div>
   }

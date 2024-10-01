@@ -15,6 +15,7 @@ export default function Home() {
   const [recentTracks, setRecentTracks] = useState<Track[] | null>(null)
   const [ playingTrack, setPlayingTrack ] = useState("")
   const [ recommendedSongs, setRecommendedSongs] = useState<Track[] | null>(null)
+  const [ fetching, isFetching] = useState(true)
   const router = useRouter()
 
   
@@ -34,6 +35,7 @@ export default function Home() {
         if (tracks) {
           setRecentTracks(tracks)
         }
+        isFetching(false)
       }
     }
     fetchRecentTracks()
@@ -57,7 +59,7 @@ export default function Home() {
     setPlayingTrack(uri)
   }
   
-  if (status === "loading") {
+  if (status === "loading" || fetching) {
     return <main className="flex flex-col justify-center items-center mt-20">Loading...</main>
   }
 
