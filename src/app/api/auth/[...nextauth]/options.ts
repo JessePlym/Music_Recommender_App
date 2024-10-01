@@ -8,7 +8,12 @@ export const options: NextAuthOptions = {
       clientSecret: process.env.CLIENT_SECRET as string,
       authorization: {
         url: "https://accounts.spotify.com/authorize",
-        params: { scope: "user-top-read%20user-read-recently-played%20user-read-private%20user-read-email%20streaming%20user-read-playback-state%20user-library-read%20user-modify-playback-state"
+        params: { 
+          scope: 
+          "user-top-read%20user-read-recently-played%20" +
+          "user-read-private%20user-read-email%20streaming%20" +
+          "user-read-playback-state%20user-library-read%20" +
+          "user-modify-playback-state"
         }
       }
     })

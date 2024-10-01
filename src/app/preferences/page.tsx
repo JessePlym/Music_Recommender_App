@@ -13,12 +13,14 @@ const initPreference: Preference = {
   isAcoustic: false,
   isInstrumental: false,
   tempo: 100,
-  mode: 1
+  mode: 1,
+  apply: false
 }
 
 export default function Preferences() {
   const { data: session } = useSession()
   const [ preference, setPreference ] = useState<Preference>(initPreference)
+  const [ buttonLabel, setButtonLabel] = useState("Apply")
   const router = useRouter()
 
   useEffect(() => {
@@ -29,6 +31,16 @@ export default function Preferences() {
     }
     fetchPreferences()
   }, [session?.userId])
+
+  const handlePreferences = () => {
+    if (buttonLabel === "Apply") {
+      setPreference({...preference, apply: false})
+      setButtonLabel("Don't apply")
+    } else {
+      setPreference({...preference, apply: true})
+      setButtonLabel("Apply")
+    }
+  }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -122,6 +134,7 @@ export default function Preferences() {
           </div>
           <button className="border-2 border-transparent z-20 rounded py-1 px-3 bg-teal-700 hover:bg-teal-800 w-1/6" type="submit">Save</button>
         </form>
+        <button className="border-2 border-transparent z-20 rounded py-1 px-3 bg-teal-700 hover:bg-teal-800 w-1/6" onClick={handlePreferences}>{buttonLabel}</button>
       </main>
     </div>
   )

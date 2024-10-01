@@ -20,7 +20,6 @@ export function calcAvgFeaturesOfListeningHistory(tracks: Track[] | null) {
     totalAcousticness: 0,
     totalDanceability: 0,
     totalInstrumentalness: 0,
-    totalMode: 0,
     totalTempo: 0
   }
 
@@ -36,7 +35,7 @@ export function calcAvgFeaturesOfListeningHistory(tracks: Track[] | null) {
     sumOfTrackFeatures.totalTempo += tracks[i].features.tempo
 
   /**
-    * For artist, album and key, calculate the most common appearence
+    * For artist, album, mode and key, calculate the most common appearence
     * The key referenced here is a musical key of a song
     */
 

@@ -32,6 +32,7 @@ type Preference = {
   isInstrumental: boolean,
   tempo: number,
   mode: number,
+  apply: boolean
 }
 
 type Feature = {
