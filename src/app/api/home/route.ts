@@ -1,16 +1,23 @@
 
 import clientPromise from '@/lib/mongo'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+
+  const url = new URL(request.url)
+  const userId: string | null = url.searchParams.get("id")
+
+  if (!userId) {
+    return NextResponse.json({ "message": "No User id provided"})
+  }
+
   try {
     const client = await clientPromise
     const db = client.db("MusicDB")
 
     
-    const data = await db.collection("preferences").find({}).toArray()
-    console.log("Request done")
-    return NextResponse.json(data)
+    const items = await db.collection("preferences").find({ "id": userId }).toArray()
+    return NextResponse.json(items[0].songPreference)
    
   } catch (error) {
     console.error(error)

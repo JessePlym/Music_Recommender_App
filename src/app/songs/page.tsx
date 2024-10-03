@@ -1,29 +1,33 @@
 "use client"
 
-import { useSession } from "next-auth/react"
+import { getSongData } from "@/lib/requests/getSongData"
+import { getSession } from "next-auth/react"
+import { useEffect } from "react"
 
 // This is a testing page
 
+const testArtistIds = ["2NPduAUeLVsfIauhRwuft1", "2UOVgpgiNTC6KK0vSC77aD", "3plJVWt88EqjvtuB4ZDRV3", "70cRZdQywnSFp9pnc2WTCE", "5kwthnxNdfnqGk0nL35wDC"]
 
-export default function Songs() {
-  const { data: session } = useSession() 
-  
-  async function test(accessToken: string) {
-    if (accessToken) {
-      const response = await fetch("http://localhost:3000/api/songs/song-data", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${accessToken}`
-        },
-        body: JSON.stringify(["2NPduAUeLVsfIauhRwuft1", "2UOVgpgiNTC6KK0vSC77aD"])
-      })
-      //console.log(await response.json())
-    } else {
-      console.log("No token")
+export default function Songs() { 
+
+  useEffect(() => {
+    const fetchSongData = async () => {
+      const session = await getSession()
+      console.log(session)
+      if (!session) return
+      const accessToken = session.accessToken
+      console.log(accessToken)
+      if (accessToken) {
+        const songData = await getSongData(accessToken, testArtistIds)
+        console.log(songData)
+      } else {
+        console.log("No token")
+      }
     }
-  }
+    fetchSongData()
+  }, [])
 
   return <div>
-    <button onClick={() => test(session?.accessToken ?? "")}>Test</button>
+    Songs
   </div>
   }

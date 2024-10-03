@@ -1,6 +1,6 @@
 "use client"
 
-import { useSession } from "next-auth/react"
+import { getSession, useSession } from "next-auth/react"
 import Player from "./components/Player"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
@@ -9,13 +9,18 @@ import { calcAvgFeaturesOfListeningHistory } from "@/lib/functions/calcAvgFeatur
 import { calcRecommendedSongs } from "@/lib/functions/calcRecommendedSongs"
 import SongList from "./components/SongList"
 import { getPreferences } from "@/lib/requests/getPreferences"
+import { getSongData } from "@/lib/requests/getSongData"
+
+const testArtistIds = ["2NPduAUeLVsfIauhRwuft1"]  // "2UOVgpgiNTC6KK0vSC77aD", "3plJVWt88EqjvtuB4ZDRV3", "70cRZdQywnSFp9pnc2WTCE", "5kwthnxNdfnqGk0nL35wDC"
 
 export default function Home() {
   const { data: session, status } = useSession()
   const [recentTracks, setRecentTracks] = useState<Track[] | null>(null)
-  const [ playingTrack, setPlayingTrack ] = useState("")
-  const [ recommendedSongs, setRecommendedSongs] = useState<Track[] | null>(null)
-  const [ fetching, isFetching] = useState(true)
+  const [songData, setSongData] = useState<Track[] | null>(null)
+  const [avgFeatures, setAvgFeatures] = useState<AverageSongFeature | null>(null)
+  const [playingTrack, setPlayingTrack] = useState("")
+  const [recommendedSongs, setRecommendedSongs] = useState<Track[] | null>(null)
+  const [fetching, isFetching] = useState(true)
   const router = useRouter()
 
   
@@ -42,18 +47,36 @@ export default function Home() {
   }, [status, session?.accessToken, session?.userId])
 
   useEffect(() => {
+    const fetchSongData = async () => {
+      const session = await getSession()
+      if (!session) return
+
+      const accessToken = session.accessToken
+
+      if (accessToken) {
+        const songData = await getSongData(accessToken, testArtistIds)
+        setSongData(songData)
+      } else {
+        console.log("No token")
+      }
+    }
+    //fetchSongData()
+  }, [])
+
+  useEffect(() => {
     const giveRecommendations = async () => {
-      if (session?.userId) {
-        const avg = calcAvgFeaturesOfListeningHistory(recentTracks)
+      if (session?.userId && recentTracks) {
         const preferences: Preference[] = await getPreferences(session.userId)
-        if (avg && recentTracks) {
+        const avg = calcAvgFeaturesOfListeningHistory(recentTracks)
+        if (avg) {
+          console.log(avg)
           setRecommendedSongs(calcRecommendedSongs(recentTracks, avg, preferences, false))
         }
       }
     }
 
     giveRecommendations()
-  }, [playingTrack, recentTracks, session?.userId])
+  }, [recentTracks, avgFeatures, session?.userId])
 
   const handlePlayingTrack = (uri: string) => {
     setPlayingTrack(uri)

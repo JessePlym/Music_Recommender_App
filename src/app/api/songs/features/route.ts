@@ -32,8 +32,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const songPrefence: Preference = await request.json()
-  if (!songPrefence) return
+  const songPreference: Preference = await request.json()
+  if (!songPreference) return
   const url = new URL(request.url)
   const userId = url.searchParams.get("id")
 
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     const collection = db.collection("preferences")
     const payload = {
       $set: {
-        ...songPrefence
+        songPreference
       }
     }
     const filter = { id: userId}

@@ -20,13 +20,15 @@ const initPreference: Preference = {
 export default function Preferences() {
   const { data: session } = useSession()
   const [ preference, setPreference ] = useState<Preference>(initPreference)
-  const [ buttonLabel, setButtonLabel] = useState("Apply")
+  const [ buttonLabel, setButtonLabel] = useState(preference.apply ? "Don't apply" : "Apply")
   const router = useRouter()
 
   useEffect(() => {
     const fetchPreferences = async () => {
       if (session?.userId) {
-        setPreference(await getPreferences(session.userId))
+        const preferences = await getPreferences(session.userId)
+        setButtonLabel(preferences.apply ? "Don't apply" : "Apply")
+        setPreference(preferences)
       }
     }
     fetchPreferences()
@@ -34,10 +36,10 @@ export default function Preferences() {
 
   const handlePreferences = () => {
     if (buttonLabel === "Apply") {
-      setPreference({...preference, apply: false})
+      setPreference({...preference, apply: true})
       setButtonLabel("Don't apply")
     } else {
-      setPreference({...preference, apply: true})
+      setPreference({...preference, apply: false})
       setButtonLabel("Apply")
     }
   }
@@ -112,7 +114,7 @@ export default function Preferences() {
                 className="size-8"
                 type="radio"
                 name="mode"
-                value={preference.mode}
+                value={1}
                 checked={preference.mode === 1}
                 id="major"
                 onChange={e => setPreference({...preference, mode: Number(e.target.value)})}
@@ -124,7 +126,7 @@ export default function Preferences() {
                 className="size-8"
                 type="radio"
                 name="mode"
-                value={preference.mode}
+                value={0}
                 checked={preference.mode === 0}
                 id="minor"
                 onChange={e => setPreference({...preference, mode: Number(e.target.value)})}
