@@ -19,6 +19,7 @@ type Track = {
   name: string,
   genre?: string | null,
   artist: string,
+  artistId: string,
   album?: Album,
   albumName: string,
   uri: string,

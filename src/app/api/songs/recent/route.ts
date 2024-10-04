@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
     if (response.ok) {
       const data = await response.json()
       tracks = filterDuplicateTracks(data.items)
-      await getTrackFeatures(tracks, token, userId)
+      await getTrackFeatures(tracks, token, "tracks", userId)
       return NextResponse.json(tracks)
     } else {
       return NextResponse.json({ "status": response.status})
@@ -78,6 +78,7 @@ function filterDuplicateTracks(items: any) {
       album: item.track.album,
       albumName: item.track.album.name,
       artist: item.track.album.artists[0].name,
+      artistId: item.track.album.artists[0].id,
       popularity: item.track.popularity,
       uri: item.track.uri,
       features: {

@@ -11,8 +11,6 @@ type avgFeatures = {
 
 export function calcAvgFeaturesOfListeningHistory(tracks: Track[] | null) {
 
-  console.log(tracks)
-
   if (!tracks) return null
 
   const tracklistLength = tracks.length

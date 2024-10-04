@@ -2,10 +2,9 @@ import clientPromise from "../mongo"
 
 const SPOTIFY_DATA_SOURCE_URL = "https://api.spotify.com/v1"
 
-export async function getTrackFeatures(tracks: Track[], accessToken: string, userId?: string) {
+export async function getTrackFeatures(tracks: Track[], accessToken: string, dataType: string, userId?: string) {
   if (tracks.length === 0) return
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  //const tracksWithFeatures: Track[] = tracks.map(({ album, ...rest}) => rest)
+
   for (const track of tracks) {
     try {
       const response = await fetch(`${SPOTIFY_DATA_SOURCE_URL}/audio-features/${track.id}`, {
@@ -22,8 +21,9 @@ export async function getTrackFeatures(tracks: Track[], accessToken: string, use
         track.features.key = featureData.key
         track.features.mode = featureData.mode
         track.features.tempo = featureData.tempo
+        await timeout(100)
       } else if (response.status === 429) {
-        console.log("Too many requests")
+        console.log("Too many requests", response)
         break
       } else {
         console.log("Could not add features")
@@ -43,10 +43,21 @@ export async function getTrackFeatures(tracks: Track[], accessToken: string, use
       const db = client.db("MusicDB")
       
       const collection = db.collection("songs")
-      const payload = {
-        $set: {
-          tracks,
-          updatedAt
+      let payload
+
+      if (dataType === "tracks") {
+        payload = {
+          $set: {
+            tracks,
+            updatedAt
+          }
+        }
+      } else {
+        payload = {
+          $set: {
+            songData: tracks,
+            updatedAt
+          }
         }
       }
    
@@ -59,4 +70,8 @@ export async function getTrackFeatures(tracks: Track[], accessToken: string, use
       console.log(err)
     }
   }
+}
+
+function timeout(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }

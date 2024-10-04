@@ -1,4 +1,5 @@
 import { getTrackFeatures } from "@/lib/functions/getTrackFeatures"
+import clientPromise from "@/lib/mongo"
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
 
@@ -20,10 +21,34 @@ export async function POST(request: NextRequest) {
   if (!token) {
     return NextResponse.json({ "message": "No Token"})
   }
+
+  const url = new URL(request.url)
+  const userId: string | null = url.searchParams.get("id")
+
+  if (!userId) {
+    return NextResponse.json({ "message": "No User id provided"})
+  }
   const topArtistIds: string[] = await request.json()
 
   if (topArtistIds.length === 0) return
   const receivedArtists: string[] = []
+
+  let tracks: Track[]
+
+  try {
+    const client = await clientPromise
+    const db = client.db("MusicDB")
+
+    const items = await db.collection("songs").find({ "id": userId}).toArray()
+    const hour = 1000 * 60 * 60
+    if (items[0].updatedAt + hour > Date.now()) {
+      tracks = items[0].songData
+      console.log("Data retreived from mongo")
+      return NextResponse.json(tracks)
+    }
+  } catch (err) {
+    console.log("Error while retrieving data from mongo")
+  }
 
   const start = Date.now()
   
@@ -50,7 +75,7 @@ export async function POST(request: NextRequest) {
   console.log("artists received: " + (Date.now() - start) + "ms")
   const queriedTracks = await queryTracksFromArtists(receivedArtists, token)
   console.log("Tracks queried: " + (Date.now() - start) + "ms")
-  await getTrackFeatures(queriedTracks, token)
+  await getTrackFeatures(queriedTracks, token, "songData", userId)
   console.log("Features added: " + (Date.now() - start) + "ms")
   return NextResponse.json(queriedTracks)
 }
@@ -81,7 +106,9 @@ async function queryTracksFromArtists(artists: string[], accessToken: string) {
             name: item.name,
             id: item.id,
             artist: item.artists[0].name,
+            artistId: item.artists[0].id,
             albumName: item.album.name,
+            album: item.album,
             uri: item.uri,
             popularity: item.popularity,
             features: {

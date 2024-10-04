@@ -11,13 +11,10 @@ import SongList from "./components/SongList"
 import { getPreferences } from "@/lib/requests/getPreferences"
 import { getSongData } from "@/lib/requests/getSongData"
 
-const testArtistIds = ["2NPduAUeLVsfIauhRwuft1"]  // "2UOVgpgiNTC6KK0vSC77aD", "3plJVWt88EqjvtuB4ZDRV3", "70cRZdQywnSFp9pnc2WTCE", "5kwthnxNdfnqGk0nL35wDC"
-
 export default function Home() {
   const { data: session, status } = useSession()
   const [recentTracks, setRecentTracks] = useState<Track[] | null>(null)
   const [songData, setSongData] = useState<Track[] | null>(null)
-  const [avgFeatures, setAvgFeatures] = useState<AverageSongFeature | null>(null)
   const [playingTrack, setPlayingTrack] = useState("")
   const [recommendedSongs, setRecommendedSongs] = useState<Track[] | null>(null)
   const [fetching, isFetching] = useState(true)
@@ -52,31 +49,36 @@ export default function Home() {
       if (!session) return
 
       const accessToken = session.accessToken
+      const userId = session.userId
 
-      if (accessToken) {
-        const songData = await getSongData(accessToken, testArtistIds)
+      if (accessToken && recentTracks && userId) {
+        const artistIds = recentTracks.map(track => track.artistId)
+        const uniqueIds = new Set<string>()
+        artistIds.forEach(id => uniqueIds.add(id))
+        const topArtistIds = [...uniqueIds.values()].slice(0, 5)
+        const songData = await getSongData(accessToken, topArtistIds, userId)
         setSongData(songData)
       } else {
         console.log("No token")
       }
     }
-    //fetchSongData()
-  }, [])
+    fetchSongData()
+  }, [recentTracks])
 
   useEffect(() => {
     const giveRecommendations = async () => {
       if (session?.userId && recentTracks) {
         const preferences: Preference[] = await getPreferences(session.userId)
         const avg = calcAvgFeaturesOfListeningHistory(recentTracks)
-        if (avg) {
+        if (avg && songData) {
           console.log(avg)
-          setRecommendedSongs(calcRecommendedSongs(recentTracks, avg, preferences, false))
+          setRecommendedSongs(calcRecommendedSongs(songData, recentTracks, avg, preferences, false))
         }
       }
     }
 
     giveRecommendations()
-  }, [recentTracks, avgFeatures, session?.userId])
+  }, [recentTracks, songData, session?.userId])
 
   const handlePlayingTrack = (uri: string) => {
     setPlayingTrack(uri)

@@ -1,4 +1,4 @@
-export function calcRecommendedSongs(tracks: Track[], avgFeatures: AverageSongFeature, userPreferences: Preference[], applyPreferences: boolean) {
+export function calcRecommendedSongs(tracks: Track[], listeningHistory: Track[], avgFeatures: AverageSongFeature, userPreferences: Preference[], applyPreferences: boolean) {
 
   /**
    * Users own preferences override average features based on listening history
@@ -48,6 +48,7 @@ export function calcRecommendedSongs(tracks: Track[], avgFeatures: AverageSongFe
       Math.pow(tempoDiff, 2)
     )
 
+    console.log("Distance for " + track.name + " is " + distance)
     distanceMap.set(track.id, distance)
     
   }
@@ -67,19 +68,33 @@ export function calcRecommendedSongs(tracks: Track[], avgFeatures: AverageSongFe
     return [...map.keys()][0]
   }
 
+  function isSongInListeningHistory(tracks: Track[], trackId: string) {
+    for (const track of tracks) {
+      if (track.id === trackId) {
+        return true
+      }
+    }
+    return false
+  }
+
   /**
    * Find top 5 most similar songs to recommend
    */
 
-  for (let i = 0; i < 5; i++) {
+  while (recommendedSongs.length < 5 && distanceMap.size !== 0) {
     const recommendedSongId = findMostSimilar(distanceMap)
 
     if (recommendedSongId !== undefined) {
       
+      // if (isSongInListeningHistory(listeningHistory, recommendedSongId)) {
+      //   distanceMap.delete(recommendedSongId)
+      //   continue
+      // }
+
       for (let j = 0; j < tracks.length; j++) {
         if (tracks[j].id === recommendedSongId) {
-          //console.log(tracks[i], "distance is " + distanceMap.get(recommendedSongId))
           recommendedSongs.push(tracks[j])
+          break
         }
       }
       distanceMap.delete(recommendedSongId)
