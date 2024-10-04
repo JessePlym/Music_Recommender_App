@@ -55,7 +55,7 @@ export default function Home() {
         const artistIds = recentTracks.map(track => track.artistId)
         const uniqueIds = new Set<string>()
         artistIds.forEach(id => uniqueIds.add(id))
-        const topArtistIds = [...uniqueIds.values()].slice(0, 5)
+        const topArtistIds = [...uniqueIds.values()].slice(0, 10)
         const songData = await getSongData(accessToken, topArtistIds, userId)
         setSongData(songData)
       } else {
@@ -71,7 +71,6 @@ export default function Home() {
         const preferences: Preference[] = await getPreferences(session.userId)
         const avg = calcAvgFeaturesOfListeningHistory(recentTracks)
         if (avg && songData) {
-          console.log(avg)
           setRecommendedSongs(calcRecommendedSongs(songData, recentTracks, avg, preferences, false))
         }
       }

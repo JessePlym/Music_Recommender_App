@@ -41,9 +41,9 @@ export async function POST(request: NextRequest) {
 
     const items = await db.collection("songs").find({ "id": userId}).toArray()
     const hour = 1000 * 60 * 60
-    if (items[0].updatedAt + hour > Date.now()) {
+    if (items[0].updatedAt + hour < Date.now()) {
       tracks = items[0].songData
-      console.log("Data retreived from mongo")
+      console.log("Data retreived from mongo\nTime left: " + ((items[0].updatedAt + hour) - Date.now()))
       return NextResponse.json(tracks)
     }
   } catch (err) {
@@ -102,24 +102,26 @@ async function queryTracksFromArtists(artists: string[], accessToken: string) {
         const data = await response.json()
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         data.tracks.items.forEach((item: any) => {
-          tracks.push({
-            name: item.name,
-            id: item.id,
-            artist: item.artists[0].name,
-            artistId: item.artists[0].id,
-            albumName: item.album.name,
-            album: item.album,
-            uri: item.uri,
-            popularity: item.popularity,
-            features: {
-              acousticness: 0,
-              danceability: 0,
-              instrumentalness: 0,
-              key: 0,
-              mode: 0,
-              tempo: 0
-            }
-          })
+          if (!tracks.find(track => track.id === item.id)) {       
+            tracks.push({
+              name: item.name,
+              id: item.id,
+              artist: item.artists[0].name,
+              artistId: item.artists[0].id,
+              albumName: item.album.name,
+              album: item.album,
+              uri: item.uri,
+              popularity: item.popularity,
+              features: {
+                acousticness: 0,
+                danceability: 0,
+                instrumentalness: 0,
+                key: 0,
+                mode: 0,
+                tempo: 0
+              }
+            })
+          }
         })
       }
     } catch (err) {

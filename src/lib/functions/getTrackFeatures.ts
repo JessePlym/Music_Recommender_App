@@ -21,7 +21,7 @@ export async function getTrackFeatures(tracks: Track[], accessToken: string, dat
         track.features.key = featureData.key
         track.features.mode = featureData.mode
         track.features.tempo = featureData.tempo
-        await timeout(100)
+        await timeout(1000)
       } else if (response.status === 429) {
         console.log("Too many requests", response)
         break
