@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function GET(request: NextRequest) {
 
   const url = new URL(request.url)
-  const userId: string | null = "12345678"//url.searchParams.get("id")
+  const userId: string | null = url.searchParams.get("id")
 
   if (!userId) {
     return NextResponse.json({ "message": "No User id provided"})

@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     const items = await db.collection("songs").find({ "id": userId}).toArray()
     const hour = 1000 * 60 * 60
     //items[0].updatedAt + hour > Date.now()
-    if (items[0].updatedAt + hour > Date.now()) {
+    if (items && items[0].updatedAt + hour > Date.now()) {
       tracks = items[0].tracks
       console.log("Data retreived from mongo\nTime left: " + ((items[0].updatedAt + hour) - Date.now()))
       return NextResponse.json(tracks)
