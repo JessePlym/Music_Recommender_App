@@ -13,7 +13,7 @@ export function calcRecommendedSongs(tracks: Track[], listeningHistory: Track[],
     avgFeatures.instrumentalness = Number(userPreferences[0].isInstrumental ?? 0)
   }
 
-  console.log(avgFeatures)
+  //console.log(avgFeatures)
   
   const distanceMap = new Map<string, number>()
   
@@ -93,7 +93,7 @@ export function calcRecommendedSongs(tracks: Track[], listeningHistory: Track[],
       for (let j = 0; j < tracks.length; j++) {
         if (tracks[j].id === recommendedSongId) {
           recommendedSongs.push(tracks[j])
-          console.log("Distance for " + tracks[j].name + " is " + distanceMap.get(tracks[j].id))
+          //console.log("Distance for " + tracks[j].name + " is " + distanceMap.get(tracks[j].id))
           break
         }
       }
