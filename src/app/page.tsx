@@ -10,6 +10,7 @@ import { calcRecommendedSongs } from "@/lib/functions/calcRecommendedSongs"
 import SongList from "./components/SongList"
 import { getPreferences } from "@/lib/requests/getPreferences"
 import { getSongData } from "@/lib/requests/getSongData"
+import Spinner from "./components/Spinner"
 
 export default function Home() {
   const { data: session, status } = useSession()
@@ -68,10 +69,10 @@ export default function Home() {
   useEffect(() => {
     const giveRecommendations = async () => {
       if (session?.userId && recentTracks) {
-        const preferences: Preference[] = await getPreferences(session.userId)
+        const preferences: Preference = await getPreferences(session.userId)
         const avg = calcAvgFeaturesOfListeningHistory(recentTracks)
         if (avg && songData) {
-          setRecommendedSongs(calcRecommendedSongs(songData, recentTracks, avg, preferences, false))
+          setRecommendedSongs(calcRecommendedSongs(songData, recentTracks, avg, [preferences], preferences.apply))
         }
       }
     }
@@ -84,7 +85,12 @@ export default function Home() {
   }
   
   if (status === "loading" || fetching) {
-    return <main className="flex flex-col justify-center items-center mt-20">Loading...</main>
+    return (
+      <main className="flex flex-col justify-center items-center mt-20">
+        <Spinner />
+        Loading...
+      </main>
+    )
   }
 
   return (
@@ -98,8 +104,10 @@ export default function Home() {
               }
             </article>
             <article className="border-l border-white p-2 flex flex-col justify-start items-center gap-2">
-              <h2>Song Suggestions</h2> 
-                < SongList tracks={recommendedSongs} handlePlayingTrack={handlePlayingTrack} />      
+              <h2>Song Suggestions</h2>
+              {!recommendedSongs ? <Spinner /> :
+                < SongList tracks={recommendedSongs} handlePlayingTrack={handlePlayingTrack} />
+              }
             </article>
           </section>
           <section className=" bg-slate-950 z-20 sticky bottom-0 shadow-xl border border-white/80 p-2 flex justify-center">

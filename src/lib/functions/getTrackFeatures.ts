@@ -21,7 +21,7 @@ export async function getTrackFeatures(tracks: Track[], accessToken: string, dat
         track.features.key = featureData.key
         track.features.mode = featureData.mode
         track.features.tempo = featureData.tempo
-        await timeout(1000)
+        //await timeout(1)
       } else if (response.status === 429) {
         console.log("Too many requests", response)
         break
@@ -41,11 +41,12 @@ export async function getTrackFeatures(tracks: Track[], accessToken: string, dat
     try {
       const client = await clientPromise
       const db = client.db("MusicDB")
+      let collection
       
-      const collection = db.collection("songs")
       let payload
-
+      
       if (dataType === "tracks") {
+        collection = db.collection("recent")
         payload = {
           $set: {
             tracks,
@@ -53,9 +54,10 @@ export async function getTrackFeatures(tracks: Track[], accessToken: string, dat
           }
         }
       } else {
+        collection = db.collection("songs")
         payload = {
           $set: {
-            songData: tracks,
+            tracks,
             updatedAt
           }
         }

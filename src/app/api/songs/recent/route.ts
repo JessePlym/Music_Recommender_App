@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     const client = await clientPromise
     const db = client.db("MusicDB")
 
-    const items = await db.collection("songs").find({ "id": userId}).toArray()
+    const items = await db.collection("recent").find({ "id": userId}).toArray()
     const hour = 1000 * 60 * 60
     if (items[0].updatedAt + hour > Date.now()) {
       tracks = items[0].tracks

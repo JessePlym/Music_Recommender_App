@@ -48,7 +48,6 @@ export function calcRecommendedSongs(tracks: Track[], listeningHistory: Track[],
       Math.pow(tempoDiff, 2)
     )
 
-    //console.log("Distance for " + track.name + " is " + distance)
     distanceMap.set(track.id, distance)
     
   }
@@ -94,6 +93,7 @@ export function calcRecommendedSongs(tracks: Track[], listeningHistory: Track[],
       for (let j = 0; j < tracks.length; j++) {
         if (tracks[j].id === recommendedSongId) {
           recommendedSongs.push(tracks[j])
+          console.log("Distance for " + tracks[j].name + " is " + distanceMap.get(tracks[j].id))
           break
         }
       }
