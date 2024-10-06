@@ -2,7 +2,7 @@
 
 import { getSession, useSession } from "next-auth/react"
 import Player from "./components/Player"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { getRecentTracks } from "@/lib/requests/getRecentTracks"
 import { calcAvgFeaturesOfListeningHistory } from "@/lib/functions/calcAvgFeatures"
@@ -21,19 +21,20 @@ export default function Home() {
   const [fetching, isFetching] = useState(true)
   const router = useRouter()
 
+  const isTokenExpired = useMemo(() => session?.expires_at ? Date.now() > session.expires_at : false, [session])
+
   
   useEffect(() => {
     if (status === 'authenticated' && session?.expires_at) {
-      const isTokenExpired = Date.now() > session.expires_at
       if (isTokenExpired) {
         router.push("/api/auth/signin")
       }
     }
-  }, [session, status, router])
+  }, [session, status, router, isTokenExpired])
 
   useEffect(() => {
     const fetchRecentTracks = async () => {
-      if (status === "authenticated" && session.accessToken && session.userId) {
+      if (status === "authenticated" && session.accessToken && session.userId && !isTokenExpired) {
         const tracks: Track[] | null = await getRecentTracks(session.accessToken, session.userId)
         if (tracks) {
           setRecentTracks(tracks)
@@ -42,12 +43,12 @@ export default function Home() {
       }
     }
     fetchRecentTracks()
-  }, [status, session?.accessToken, session?.userId])
+  }, [status, session?.accessToken, session?.userId, isTokenExpired])
 
   useEffect(() => {
     const fetchSongData = async () => {
       const session = await getSession()
-      if (!session) return
+      if (!session || isTokenExpired) return
 
       const accessToken = session.accessToken
       const userId = session.userId
@@ -56,13 +57,13 @@ export default function Home() {
         const artistIds = recentTracks.map(track => track.artistId)
         const uniqueIds = new Set<string>()
         artistIds.forEach(id => uniqueIds.add(id))
-        const topArtistIds = [...uniqueIds.values()].slice(0, 1)
+        const topArtistIds = [...uniqueIds.values()].slice(0, 5)
         const songData = await getSongData(accessToken, topArtistIds, userId)
         setSongData(songData ?? [])
       }
     }
     fetchSongData()
-  }, [recentTracks])
+  }, [recentTracks, isTokenExpired])
 
   useEffect(() => {
     const giveRecommendations = async () => {

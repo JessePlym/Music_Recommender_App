@@ -23,7 +23,7 @@ export const options: NextAuthOptions = {
       if (account) {
         token.accessToken = account.access_token
         token.refreshToken = account.refresh_token
-        token.expires_at = Date.now() + (24 * 60 * 60 * 1000)
+        token.expires_at = Date.now() + (12 * 60 * 60 * 1000)
         token.userId = account.providerAccountId
       }
       return token
