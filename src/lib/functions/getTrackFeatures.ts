@@ -27,14 +27,16 @@ export async function getTrackFeatures(tracks: Track[], accessToken: string, dat
         break
       } else {
         console.log("Could not add features")
+        break
       }
       
     } catch (err) {
-      return
+      console.log(err)
+      break
     }
   }
   if (tracks.length > 10) {
-    // save to db for testing
+    // save to db
 
     const updatedAt = Date.now()
     

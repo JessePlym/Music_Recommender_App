@@ -41,8 +41,8 @@ export async function POST(request: NextRequest) {
 
     const items = await db.collection("songs").find({ "id": userId}).toArray()
     const hour = 1000 * 60 * 60
-    //items[0].updatedAt + hour > Date.now()
-    if (items && items[0].updatedAt + hour > Date.now()) {
+    
+    if (items.length > 0 && items[0].updatedAt + hour > Date.now()) {
       tracks = items[0].tracks
       console.log("Data retreived from mongo\nTime left: " + ((items[0].updatedAt + hour) - Date.now()))
       return NextResponse.json(tracks)
@@ -70,7 +70,9 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ "status": response.status})
       }
     } catch (err) {
-      return NextResponse.json({"message": "Error"})
+      tracks = []
+      console.log(err)
+      return NextResponse.json(tracks)
     }
   }
   console.log("artists received: " + (Date.now() - start) + "ms")
