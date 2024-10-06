@@ -21,7 +21,8 @@ export async function getTrackFeatures(tracks: Track[], accessToken: string, dat
         track.features.key = featureData.key
         track.features.mode = featureData.mode
         track.features.tempo = featureData.tempo
-        //await timeout(10)
+        await timeout(10)
+        break
       } else if (response.status === 429) {
         console.log("Too many requests", response)
         break
@@ -38,7 +39,7 @@ export async function getTrackFeatures(tracks: Track[], accessToken: string, dat
   if (tracks.length > 10) {
     // save to db
 
-    const updatedAt = Date.now()
+    const updatedAt = new Date()
     
     try {
       const client = await clientPromise
@@ -46,13 +47,17 @@ export async function getTrackFeatures(tracks: Track[], accessToken: string, dat
       let collection
       
       let payload
-      
+
+      const expiresIn = 60 * 60 * 24
+      const expireAfterSeconds = expiresIn
+
       if (dataType === "tracks") {
         collection = db.collection("recent")
         payload = {
           $set: {
             tracks,
-            updatedAt
+            updatedAt,
+            expireAfterSeconds
           }
         }
       } else {
@@ -60,7 +65,8 @@ export async function getTrackFeatures(tracks: Track[], accessToken: string, dat
         payload = {
           $set: {
             tracks,
-            updatedAt
+            updatedAt,
+            expireAfterSeconds
           }
         }
       }
