@@ -1,5 +1,5 @@
+import { getTracksFromMongo } from "@/lib/functions/getDataFromMongo"
 import { getTrackFeatures } from "@/lib/functions/getTrackFeatures"
-import clientPromise from "@/lib/mongo"
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
 
@@ -33,23 +33,15 @@ export async function POST(request: NextRequest) {
   if (topArtistIds.length === 0) return
   const receivedArtists: string[] = []
 
-  let tracks: Track[]
+  const tracks = await getTracksFromMongo(userId, "songs")
 
-  try {
-    const client = await clientPromise
-    const db = client.db("MusicDB")
-
-    const items = await db.collection("songs").find({ "id": userId}).toArray()
-    const hour = 1000 * 60 * 60
-    
-    if (items.length > 0 && items[0].updatedAt + hour > Date.now()) {
-      tracks = items[0].tracks
-      console.log("Data retreived from mongo\nTime left: " + ((items[0].updatedAt + hour) - Date.now()))
-      return NextResponse.json(tracks)
-    }
-  } catch (err) {
-    console.log("Error while retrieving data from mongo")
+  if (tracks) {
+    return NextResponse.json(tracks)
   }
+
+  /**
+   * If no tracks received from mongo, begin fetching from Spotify API
+   */
 
   const start = Date.now()
   
@@ -70,7 +62,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ "status": response.status})
       }
     } catch (err) {
-      tracks = []
+      const tracks: Track[] = []
       console.log(err)
       return NextResponse.json(tracks)
     }

@@ -1,7 +1,7 @@
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
 import { getTrackFeatures } from "@/lib/functions/getTrackFeatures"
-import clientPromise from "@/lib/mongo"
+import { getTracksFromMongo } from "@/lib/functions/getDataFromMongo"
 
 const SPOTIFY_DATA_SOURCE_URL = "https://api.spotify.com/v1"
 const LIMIT = 50
@@ -24,22 +24,16 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ "message": "No Token"})
   }
 
-  let tracks: Track[]
+  let tracks = await getTracksFromMongo(userId, "recent")
 
-  try {
-    const client = await clientPromise
-    const db = client.db("MusicDB")
-
-    const items = await db.collection("recent").find({ "id": userId}).toArray()
-    const hour = 1000 * 60 * 60
-    if (items.length > 0 && items[0].updatedAt + hour > Date.now()) {
-      tracks = items[0].tracks
-      console.log("Data retreived from mongo")
-      return NextResponse.json(tracks)
-    }
-  } catch (err) {
-    console.log("Error while retrieving data from mongo")
+  if (tracks) {
+    return NextResponse.json(tracks)
   }
+
+  /**
+   * If no tracks received from mongo, begin fetching from Spotify API
+   */
+
   try {
     const response = await fetch(`${SPOTIFY_DATA_SOURCE_URL}/me/player/recently-played?before=${Date.now()}&limit=${LIMIT}`, {
       method: "GET",
