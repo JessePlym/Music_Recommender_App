@@ -13,7 +13,7 @@ const initPreference: Preference = {
   isAcoustic: false,
   isInstrumental: false,
   tempo: 100,
-  mode: 1,
+  mode: 0,
   apply: false
 }
 

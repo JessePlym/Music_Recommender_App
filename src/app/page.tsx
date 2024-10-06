@@ -68,7 +68,6 @@ export default function Home() {
     const giveRecommendations = async () => {
       if (session?.userId && recentTracks) {
         const preferences: Preference = await getPreferences(session.userId)
-        console.log(preferences)
         const avg = calcAvgFeaturesOfListeningHistory(recentTracks)
         if (avg && songData) {
           const songRecommendations: Track[] = calcRecommendedSongs(songData, recentTracks, avg, [preferences], preferences.apply)
