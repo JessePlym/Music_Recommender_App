@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     if (items.length > 0 && items[0].updatedAt + hour > Date.now()) {
       tracks = items[0].tracks
       console.log("Data retreived from mongo\nTime left: " + ((items[0].updatedAt + hour) - Date.now()))
-      return NextResponse.json(tracks)
+      //return NextResponse.json(tracks)
     }
   } catch (err) {
     console.log("Error while retrieving data from mongo")

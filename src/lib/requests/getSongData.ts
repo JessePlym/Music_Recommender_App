@@ -10,8 +10,13 @@ export async function getSongData(accessToken: string, artistIds: string[], user
         },
         body: JSON.stringify(artistIds)
       })
-      const songData = await response.json()
-      return songData
+      if (response.ok) {
+        const songData: Track[] = await response.json()
+        return songData
+      } else {
+        console.log(response.status)
+        return null
+      }
     } catch (err) {
       console.log("Error while fetching data")
     }
