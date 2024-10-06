@@ -11,6 +11,7 @@ import SongList from "./components/SongList"
 import { getPreferences } from "@/lib/requests/getPreferences"
 import { getSongData } from "@/lib/requests/getSongData"
 import Spinner from "./components/Spinner"
+import useWindowSize from "./hooks/useWindowSize"
 
 export default function Home() {
   const { data: session, status } = useSession()
@@ -20,6 +21,9 @@ export default function Home() {
   const [recommendedSongs, setRecommendedSongs] = useState<Track[] | null>(null)
   const [fetching, isFetching] = useState(true)
   const router = useRouter()
+  const { width } = useWindowSize()
+
+  const mobile = width < 450
 
   const isTokenExpired = useMemo(() => session?.expires_at ? Date.now() > session.expires_at : false, [session])
 
@@ -95,18 +99,18 @@ export default function Home() {
 
   return (
     <>
-      <main className="h-full mx-10 grid grid-rows-[8fr,1fr] gap-2">
-          <section className="relative bg-slate-950 mt-5 z-20 shadow-xl border border-white/80 p-2 grid grid-cols-[3fr,5fr]">
+      <main className={`h-full ${mobile ? "mx-4" : "mx-10"} grid grid-rows-[8fr,1fr] gap-2`}>
+          <section className={`relative bg-slate-950 mt-5 z-20 shadow-xl border border-white/80 p-2 ${mobile ? "flex flex-col-reverse" : "grid grid-cols-[3fr,5fr]"}`}>
             <article className="flex flex-col gap-2 p-2">Recently Played Songs
               {
                 recentTracks &&
-                < SongList tracks={recentTracks} handlePlayingTrack={handlePlayingTrack}/>
+                < SongList tracks={recentTracks} handlePlayingTrack={handlePlayingTrack} mobile={mobile}/>
               }
             </article>
-            <article className="border-l border-white p-2 flex flex-col justify-start items-center gap-2">
+            <article className={`${mobile ? "border-b" : "border-l items-center"} border-white p-2 flex flex-col justify-start gap-2`}>
               <h2>Song Suggestions</h2>
               {(recommendedSongs === null || recommendedSongs.length === 0) ? <Spinner /> :
-                < SongList tracks={recommendedSongs} handlePlayingTrack={handlePlayingTrack} />
+                < SongList tracks={recommendedSongs} handlePlayingTrack={handlePlayingTrack} mobile={mobile}/>
               }
             </article>
           </section>
