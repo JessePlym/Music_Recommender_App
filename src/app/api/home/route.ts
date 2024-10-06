@@ -4,6 +4,15 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: NextRequest) {
 
+  const defaultPreferences: Preference = {
+    key: 0,
+    isAcoustic: false,
+    isInstrumental: false,
+    tempo: 100,
+    mode: 0,
+    apply: false
+  }
+
   const url = new URL(request.url)
   const userId: string | null = url.searchParams.get("id")
 
@@ -14,13 +23,16 @@ export async function GET(request: NextRequest) {
   try {
     const client = await clientPromise
     const db = client.db("MusicDB")
-
     
     const items = await db.collection("preferences").find({ "id": userId }).toArray()
-    return NextResponse.json(items[0].songPreference)
+    if (items.length !== 0 || !items) {
+      return NextResponse.json(items[0].songPreference)
+    } else {
+      return NextResponse.json(defaultPreferences)
+    }
    
   } catch (error) {
-    console.error(error)
-    return NextResponse.json({ message: 'Something went wrong', error })
+    console.log(error)
+    return NextResponse.json(defaultPreferences)
   }
 }

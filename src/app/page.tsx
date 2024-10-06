@@ -56,11 +56,9 @@ export default function Home() {
         const artistIds = recentTracks.map(track => track.artistId)
         const uniqueIds = new Set<string>()
         artistIds.forEach(id => uniqueIds.add(id))
-        const topArtistIds = [...uniqueIds.values()].slice(0, 10)
+        const topArtistIds = [...uniqueIds.values()].slice(0, 1)
         const songData = await getSongData(accessToken, topArtistIds, userId)
         setSongData(songData)
-      } else {
-        console.log("No token")
       }
     }
     fetchSongData()
@@ -70,9 +68,11 @@ export default function Home() {
     const giveRecommendations = async () => {
       if (session?.userId && recentTracks) {
         const preferences: Preference = await getPreferences(session.userId)
+        console.log(preferences)
         const avg = calcAvgFeaturesOfListeningHistory(recentTracks)
         if (avg && songData) {
-          setRecommendedSongs(calcRecommendedSongs(songData, recentTracks, avg, [preferences], preferences.apply))
+          const songRecommendations: Track[] = calcRecommendedSongs(songData, recentTracks, avg, [preferences], preferences.apply)
+          setRecommendedSongs(songRecommendations)
         }
       }
     }
