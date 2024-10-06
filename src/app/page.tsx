@@ -70,8 +70,8 @@ export default function Home() {
       if (session?.userId && recentTracks) {
         const preferences: Preference = await getPreferences(session.userId)
         const avg = calcAvgFeaturesOfListeningHistory(recentTracks)
-        if (avg && songData) {
-          const songRecommendations: Track[] = calcRecommendedSongs(songData, recentTracks, avg, [preferences], preferences.apply)
+        if (avg) {
+          const songRecommendations: Track[] = calcRecommendedSongs(songData ?? recentTracks, recentTracks, avg, [preferences], preferences.apply)
           setRecommendedSongs(songRecommendations)
         }
       }

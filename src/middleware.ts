@@ -4,7 +4,7 @@ export { default } from "next-auth/middleware"
 
 const allowedOrigins = process.env.NODE_ENV === "production"
   ? ["https://music-recommender-app.vercel.app"]
-  : ["http://localhost:3000"]
+  : ["http://localhost:3000", "https://music-recommender-app.vercel.app"]
 export function Middleware(request: NextRequest) {
 
   const origin = request.headers.get("origin")

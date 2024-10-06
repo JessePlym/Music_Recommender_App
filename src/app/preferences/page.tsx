@@ -48,7 +48,6 @@ export default function Preferences() {
     e.preventDefault()
     if (session?.userId) {
       await sendPreferences(preference, session?.userId)
-      setPreference(initPreference)
       router.push("/")
     }
   }
