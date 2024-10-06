@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
 
     const items = await db.collection("recent").find({ "id": userId}).toArray()
     const hour = 1000 * 60 * 60
-    if (items[0].updatedAt + hour > Date.now()) {
+    if (items.length > 0 && items[0].updatedAt + hour > Date.now()) {
       tracks = items[0].tracks
       console.log("Data retreived from mongo")
       return NextResponse.json(tracks)
@@ -57,7 +57,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ "status": response.status})
     }
   } catch (err) {
-    return NextResponse.json({"message": "Error"})
+    tracks = []
+    return NextResponse.json(tracks)
   }
 }
 

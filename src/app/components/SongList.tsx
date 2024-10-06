@@ -8,7 +8,7 @@ type Props = {
 export default function SongList({ tracks, handlePlayingTrack }: Props) {
   return (
     <ul className="text-xl flex-col flex gap-2">
-      { tracks && tracks.slice(0, 20).map(track => (
+      { tracks && tracks.length > 0 && tracks.slice(0, 20).map(track => (
         <li className="flex justify-start items-center gap-2" key={track?.id}>
           <Image 
             alt="album cover"
