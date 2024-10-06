@@ -12,6 +12,7 @@ import Header from "./components/Header";
 export const metadata: Metadata = {
   title: "Music Recommender App",
   description: "This app is part of thesis project",
+  authors: { name: "Jesse Plym"}
 };
 
 export default function RootLayout({
