@@ -1,8 +1,6 @@
-import clientPromise from "../mongo"
-
 const SPOTIFY_DATA_SOURCE_URL = "https://api.spotify.com/v1"
 
-export async function getTrackFeatures(tracks: Track[], accessToken: string, dataType: string, userId?: string) {
+export async function getTrackFeatures(tracks: Track[], accessToken: string) {
   if (tracks.length === 0) return
 
   for (const track of tracks) {
@@ -35,50 +33,7 @@ export async function getTrackFeatures(tracks: Track[], accessToken: string, dat
       break
     }
   }
-  if (tracks.length > 10) {
-    // save to db
-
-    const updatedAt = Date.now()
-    
-    try {
-      const client = await clientPromise
-      const db = client.db("MusicDB")
-      let collection
-      
-      let payload
-
-      const expiresIn = 60 * 60 * 24
-      const expireAfterSeconds = expiresIn
-
-      if (dataType === "tracks") {
-        collection = db.collection("recent")
-        payload = {
-          $set: {
-            tracks,
-            updatedAt,
-            expireAfterSeconds
-          }
-        }
-      } else {
-        collection = db.collection("songs")
-        payload = {
-          $set: {
-            tracks,
-            updatedAt,
-            expireAfterSeconds
-          }
-        }
-      }
-   
-      const filter = { id: userId}
-      const options = { upsert: true}
-    
-      await collection.updateOne(filter, payload, options)
-      
-    } catch (err) {
-      console.log(err)
-    }
-  }
+  
 }
 
 function timeout(ms: number) {

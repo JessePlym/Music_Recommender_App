@@ -1,27 +1,24 @@
-import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
 import { getTrackFeatures } from "@/lib/functions/getTrackFeatures"
 import { getTracksFromMongo } from "@/lib/functions/getDataFromMongo"
+import { getTokenFromJWT, getUserIdFromRequestParams } from "@/lib/functions/getRequestParams"
+import { saveTracksToMongo } from "@/lib/functions/saveDataToMongo"
 
 const SPOTIFY_DATA_SOURCE_URL = "https://api.spotify.com/v1"
 const LIMIT = 50
 const secret = process.env.NEXTAUTH_SECRET as string
 
 export async function GET(request: NextRequest) {
-  const jwt = await getToken({req: request, secret})
-  if (!jwt) return
-  
-  const token = jwt?.accessToken
+  const token = await getTokenFromJWT(request, secret)
 
-  const url = new URL(request.url)
-  const userId: string | null = url.searchParams.get("id")
+  if (!token) {
+    return NextResponse.json({ "message": "No Token"})
+  }
+
+  const userId = getUserIdFromRequestParams(request)
 
   if (!userId) {
     return NextResponse.json({ "message": "No User id provided"})
-  }
-  
-  if (!token) {
-    return NextResponse.json({ "message": "No Token"})
   }
 
   let tracks = await getTracksFromMongo(userId, "recent")
@@ -45,7 +42,8 @@ export async function GET(request: NextRequest) {
     if (response.ok) {
       const data = await response.json()
       tracks = filterDuplicateTracks(data.items)
-      await getTrackFeatures(tracks, token, "tracks", userId)
+      await getTrackFeatures(tracks, token)
+      await saveTracksToMongo(tracks, "recent", userId)
       return NextResponse.json(tracks)
     } else {
       return NextResponse.json({ "status": response.status})

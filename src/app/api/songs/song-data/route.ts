@@ -1,6 +1,5 @@
 import { getTracksFromMongo } from "@/lib/functions/getDataFromMongo"
-import { getTrackFeatures } from "@/lib/functions/getTrackFeatures"
-import { getToken } from "next-auth/jwt"
+import { getTokenFromJWT, getUserIdFromRequestParams } from "@/lib/functions/getRequestParams"
 import { NextRequest, NextResponse } from "next/server"
 
 const SPOTIFY_DATA_SOURCE_URL = "https://api.spotify.com/v1"
@@ -13,17 +12,13 @@ type Item = {
 }
 
 export async function POST(request: NextRequest) {
-  const jwt = await getToken({req: request, secret})
-  if (!jwt) return
-  
-  const token = jwt?.accessToken
+  const token = await getTokenFromJWT(request, secret)
 
   if (!token) {
     return NextResponse.json({ "message": "No Token"})
   }
 
-  const url = new URL(request.url)
-  const userId: string | null = url.searchParams.get("id")
+  const userId = getUserIdFromRequestParams(request)
 
   if (!userId) {
     return NextResponse.json({ "message": "No User id provided"})
@@ -36,7 +31,7 @@ export async function POST(request: NextRequest) {
   const tracks = await getTracksFromMongo(userId, "songs")
 
   if (tracks) {
-    return NextResponse.json(tracks)
+    return NextResponse.json({tracks: tracks, dataFromMongo: true})
   }
 
   /**
@@ -70,9 +65,7 @@ export async function POST(request: NextRequest) {
   console.log("artists received: " + (Date.now() - start) + "ms")
   const queriedTracks = await queryTracksFromArtists(receivedArtists, token)
   console.log("Tracks queried: " + (Date.now() - start) + "ms")
-  await getTrackFeatures(queriedTracks, token, "songData", userId)
-  console.log("Features added: " + (Date.now() - start) + "ms")
-  return NextResponse.json(queriedTracks)
+  return NextResponse.json({tracks: queriedTracks, dataFromMongo: false})
 }
 
 function findItemsWithHighestPopularity(items: Item[]) {
