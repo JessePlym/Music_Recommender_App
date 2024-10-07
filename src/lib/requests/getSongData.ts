@@ -52,10 +52,8 @@ export async function getSongData(accessToken: string, artistIds: string[], user
     let songsToReturn: Track[] = []
 
     for (let i = 0; i < songData.length; i = i + 100) {
-      console.log("fetching audio-features")
       const partialSongData = songData.slice(i, i + 100)
       const songDataWithFeatures = await addAudioFeatures(accessToken, partialSongData, false, userId)
-      console.log(songDataWithFeatures)
       songsToReturn = [...songsToReturn, ...songDataWithFeatures]
     }
 

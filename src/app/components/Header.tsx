@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useState } from "react"
 import { FaWrench, FaSignOutAlt } from "react-icons/fa"
 import useWindowSize from "../hooks/useWindowSize"
+import { FaTrashCan } from "react-icons/fa6"
 
 export default function Header() {
   const [searchInput, setSearchInput] = useState("")
@@ -37,6 +38,9 @@ export default function Header() {
             <Link href="/api/auth/signout">
               <FaSignOutAlt />
             </Link>
+            <Link href="/user-data">
+              <FaTrashCan />
+            </Link>
           </div>
           : 
           <div className="flex flex-row w-full justify-between py-4">
@@ -46,6 +50,9 @@ export default function Header() {
             </Link>
             <Link href="/api/auth/signout">
               <FaSignOutAlt />
+            </Link>
+            <Link href="/user-data">
+              <FaTrashCan />
             </Link>
           </div>
           }
