@@ -7,6 +7,8 @@ Actual algoritm code can be found under `src/lib/functions`.
 
 ## Screenshots
 
+### Dashboard in mobile view
+
 ![dashboard in mobile view](./images/UI_mobile.png)
 
 ## How to use
