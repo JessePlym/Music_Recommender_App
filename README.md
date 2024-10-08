@@ -5,6 +5,10 @@ A valid Spotify account is required in order to use the application.
 A recommender algoritm is built for the application in order to suggest songs. The algoritm calculates similarities of tracks using Euclidean distance.
 Actual algoritm code can be found under `src/lib/functions`.
 
+## Screenshots
+
+![dashboard in mobile view](./images/UI_mobile.png)
+
 ## How to use
 
 The app is running at https://music-recommender-app.vercel.app/.
