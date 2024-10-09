@@ -58,12 +58,12 @@ export default function Preferences() {
   return (
     <div className="flex justify-center">
       <main className={`bg-slate-950 m-5 z-20 shadow-xl border border-white/80 p-2 flex flex-col md:w-1/2 w-full justify-center items-center ${mobile && "text-2xl"}`}>
-        <h2>Select your musical preferences</h2>
+        <h2 className={`${mobile && "text-lg"}`}>Select your musical preferences</h2>
         <form className={`flex flex-col ${mobile ? "gap-8" : "gap-4"} mt-4 w-full items-center p-2`} onSubmit={handleSubmit}>
         <div className="flex w-full justify-between items-center">
             <label htmlFor="key">Key</label>
             <select 
-              className={`text-black ${mobile && "text-3xl"}`}
+              className={`text-black w-20 ${mobile && "text-3xl"}`}
               name="key"
               id="key"
               value={preference.key}
@@ -75,6 +75,18 @@ export default function Preferences() {
                 ))
               }
             </select>
+          </div>
+          <div className="flex w-full justify-between items-center">
+            <label htmlFor="tempo">{`Tempo (BPM)`}</label>
+            <input 
+              className={`w-20 px-2 py-1 text-black ${mobile && "text-3xl"}`}
+              type="number"
+              min={1}
+              max={200}
+              value={preference.tempo}
+              id="tempo"
+              onChange={e => setPreference({...preference, tempo: Number(e.target.value)})}
+            />
           </div>
           <div className="flex w-full justify-between items-center">
             <label htmlFor="acoustic">Acoustic</label>
@@ -95,21 +107,6 @@ export default function Preferences() {
               id="instrumental"
               onChange={e => setPreference({...preference, isInstrumental: e.target.checked})}
             />
-          </div>
-          <div className="flex w-full justify-between items-center">
-            <label htmlFor="tempo">Tempo</label>
-            <div>
-              <input 
-                className={`w-20 px-2 py-1 text-black ${mobile && "text-3xl"}`}
-                type="number"
-                min={1}
-                max={200}
-                value={preference.tempo}
-                id="tempo"
-                onChange={e => setPreference({...preference, tempo: Number(e.target.value)})}
-              />
-              <span className="ml-2">BPM</span>
-            </div>
           </div>
           <div className={`flex w-full ${mobile ? "justify-between" : "justify-items-start"} gap-8 items-center`}>
             <label htmlFor="major" className={`${mobile && "flex gap-2 items-center"}`}>
