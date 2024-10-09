@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 
 import clientPromise from "../mongo"
 
-export async function savePreferences(preferenceData: FormData) {
+export async function savePreferences(userId: string, preferenceData: FormData) {
 
   const songPreference: Preference = {
     key: 0,
@@ -20,8 +20,9 @@ export async function savePreferences(preferenceData: FormData) {
   songPreference.isAcoustic = Boolean(preferenceData.get("acoustic"))
   songPreference.isInstrumental = Boolean(preferenceData.get("instrumental"))
   songPreference.mode = Number(preferenceData.get("mode"))
+  songPreference.apply = Boolean(preferenceData.get("apply"))
 
-  const userId = preferenceData.get("userId")
+  console.log(userId)
 
   try {
     const client = await clientPromise

@@ -1,7 +1,7 @@
 "use client"
 
-import { FormEvent, useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+//import { useRouter } from "next/navigation"
 import { getPreferences } from "@/lib/requests/getPreferences"
 import { savePreferences } from "@/lib/server/actions"
 import useWindowSize from "../hooks/useWindowSize"
@@ -22,7 +22,6 @@ const initPreference: Preference = {
 export default function Preferences() {
   const { userId } = useAuth()
   const [ preference, setPreference ] = useState<Preference>(initPreference)
-  const [ buttonLabel, setButtonLabel] = useState(preference.apply ? "Don't apply" : "Apply")
   const { pending } = useFormStatus()
   const { width } = useWindowSize()
 
@@ -32,36 +31,17 @@ export default function Preferences() {
     const fetchPreferences = async () => {
       if (userId) {
         const preferences = await getPreferences(userId)
-        setButtonLabel(preferences.apply ? "Don't apply" : "Apply")
         setPreference(preferences)
       }
     }
     fetchPreferences()
   }, [userId])
 
-  const handlePreferences = () => {
-    if (buttonLabel === "Apply") {
-      setPreference({...preference, apply: true})
-      setButtonLabel("Don't apply")
-    } else {
-      setPreference({...preference, apply: false})
-      setButtonLabel("Apply")
-    }
-  }
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    const formData = new FormData(e.currentTarget)
-
-    if (userId) {
-      formData.append("userId", userId)
-    }
-  }
-
   return (
     <div className="flex justify-center">
       <main className={`bg-slate-950 m-5 z-20 shadow-xl border border-white/80 p-2 flex flex-col md:w-1/2 w-full justify-center items-center ${mobile && "text-2xl"}`}>
         <h2 className={`${mobile && "text-lg"}`}>Select your musical preferences</h2>
-        <form className={`flex flex-col ${mobile ? "gap-8" : "gap-4"} mt-4 w-full items-center p-2`} action={savePreferences} onSubmit={handleSubmit}>
+        <form className={`flex flex-col ${mobile ? "gap-8" : "gap-4"} mt-4 w-full items-center p-2`} action={savePreferences.bind(null, userId ?? "")}>
         <div className="flex w-full justify-between items-center">
             <label htmlFor="key">Key</label>
             <select 
@@ -139,11 +119,15 @@ export default function Preferences() {
               Minor
             </label>
           </div>
-          <div>
-            <input 
-              hidden
-              value={userId ?? ""}
-              name="userId"
+          <div className="flex w-full justify-between items-center mt-8 mb-4">
+            <label htmlFor="apply">Apply these for suggestions</label>
+            <input
+              className={`${mobile ? "size-12" : "size-8"}`} 
+              type="checkbox"
+              name="apply"
+              checked={preference.apply}
+              id="apply"
+              onChange={e => setPreference({...preference, apply: e.target.checked})}
             />
           </div>
           <button 
@@ -154,7 +138,6 @@ export default function Preferences() {
             Save
           </button>
         </form>
-        <button className="border-2 border-transparent z-20 rounded py-2 px-3.5 bg-teal-700 hover:bg-teal-800 w-fit text-3xl" onClick={handlePreferences}>{buttonLabel}</button>
       </main>
     </div>
   )
