@@ -2,9 +2,9 @@
 
 import { FormEvent, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { sendPreferences } from "@/lib/requests/sendPreferences"
 import { useSession } from "next-auth/react"
 import { getPreferences } from "@/lib/requests/getPreferences"
+import { sendPreferences } from "@/lib/server/actions"
 import useWindowSize from "../hooks/useWindowSize"
 
 const KEYS = ["C", "C#/D♭", "D", "D#/E♭", "E", "F", "F#/G♭", "G", "G#/A♭", "A", "A#/B♭", "B"]
@@ -48,18 +48,18 @@ export default function Preferences() {
     }
   }
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (session?.userId) {
-      await sendPreferences(preference, session?.userId)
-      router.push("/")
-    }
-  }
+  // const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault()
+  //   if (session?.userId) {
+  //     await sendPreferences(preference, session?.userId)
+  //     router.push("/")
+  //   }
+  // }
   return (
     <div className="flex justify-center">
       <main className={`bg-slate-950 m-5 z-20 shadow-xl border border-white/80 p-2 flex flex-col md:w-1/2 w-full justify-center items-center ${mobile && "text-2xl"}`}>
         <h2 className={`${mobile && "text-lg"}`}>Select your musical preferences</h2>
-        <form className={`flex flex-col ${mobile ? "gap-8" : "gap-4"} mt-4 w-full items-center p-2`} onSubmit={handleSubmit}>
+        <form className={`flex flex-col ${mobile ? "gap-8" : "gap-4"} mt-4 w-full items-center p-2`} action={sendPreferences}>
         <div className="flex w-full justify-between items-center">
             <label htmlFor="key">Key</label>
             <select 
@@ -81,6 +81,7 @@ export default function Preferences() {
             <input 
               className={`w-20 px-2 py-1 text-black ${mobile && "text-3xl"}`}
               type="number"
+              name="tempo"
               min={1}
               max={200}
               value={preference.tempo}
@@ -93,6 +94,7 @@ export default function Preferences() {
             <input
               className={`${mobile ? "size-12" : "size-8"}`} 
               type="checkbox"
+              name="acoustic"
               checked={preference.isAcoustic}
               id="acoustic"
               onChange={e => setPreference({...preference, isAcoustic: e.target.checked})}
@@ -103,6 +105,7 @@ export default function Preferences() {
             <input 
               className={`${mobile ? "size-12" : "size-8"}`} 
               type="checkbox"
+              name="instrumental"
               checked={preference.isInstrumental}
               id="instrumental"
               onChange={e => setPreference({...preference, isInstrumental: e.target.checked})}

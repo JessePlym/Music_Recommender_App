@@ -8,16 +8,18 @@ import { FaTrashCan } from "react-icons/fa6"
 export default function Header() {
   const { width } = useWindowSize()
 
-  return (
+  const wideScreen = width > 1100
+
+  return ( 
     <header className="relative bg-teal-700 text-white top-0 z-20 flex flex-col sm:flex-row justify-between items-center">
-      { width > 1000 ? 
+      { wideScreen ? 
         <h1 className="mx-10 hidden lg:flex p-4">
           Music Recommender App
         </h1>
         : <h1></h1>
       }
       <nav className="mx-10 sm:w-1/2 w-5/6 flex items-center h-full">
-        { width > 1100 ? 
+        { wideScreen ? 
           <div className="flex gap-10 items-end">
             <Link className="hover:text-slate-300" href="/">
               Home

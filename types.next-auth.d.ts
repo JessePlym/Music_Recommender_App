@@ -11,6 +11,12 @@ declare module "next-auth" {
   }
 }
 
+declare module "next-auth" {
+  interface User {
+    userId?: string
+  }
+}
+
 // Extend the default `JWT` interface
 declare module "next-auth/jwt" {
   interface JWT {

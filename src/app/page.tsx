@@ -12,9 +12,11 @@ import { getPreferences } from "@/lib/requests/getPreferences"
 import { getSongData } from "@/lib/requests/getSongData"
 import Spinner from "./components/Spinner"
 import useWindowSize from "./hooks/useWindowSize"
+import useAuth from "./hooks/useAuth"
 
 export default function Home() {
   const { data: session, status } = useSession()
+  const { userId, accessToken, expires_at } = useAuth()
   const [recentTracks, setRecentTracks] = useState<Track[] | null>(null)
   const [songData, setSongData] = useState<Track[] | null>(null)
   const [playingTrack, setPlayingTrack] = useState("")
@@ -25,21 +27,21 @@ export default function Home() {
 
   const mobile = width < 450
 
-  const isTokenExpired = useMemo(() => session?.expires_at ? Date.now() > session.expires_at : false, [session])
+  const isTokenExpired = useMemo(() => expires_at ? Date.now() > expires_at : false, [expires_at])
 
   
   useEffect(() => {
-    if (status === 'authenticated' && session?.expires_at) {
+    if (status === 'authenticated' && expires_at) {
       if (isTokenExpired) {
         router.push("/api/auth/signin")
       }
     }
-  }, [session, status, router, isTokenExpired])
+  }, [expires_at, status, router, isTokenExpired])
 
   useEffect(() => {
     const fetchRecentTracks = async () => {
-      if (status === "authenticated" && session.accessToken && session.userId && !isTokenExpired) {
-        const tracks: Track[] | null = await getRecentTracks(session.accessToken, session.userId)
+      if (status === "authenticated" && accessToken && userId && !isTokenExpired) {
+        const tracks: Track[] | null = await getRecentTracks(accessToken, userId)
         if (tracks) {
           setRecentTracks(tracks)
         }
@@ -47,15 +49,11 @@ export default function Home() {
       }
     }
     fetchRecentTracks()
-  }, [status, session?.accessToken, session?.userId, isTokenExpired])
+  }, [status, accessToken, userId, isTokenExpired])
 
   useEffect(() => {
     const fetchSongData = async () => {
-      const session = await getSession()
-      if (!session || isTokenExpired) return
-
-      const accessToken = session.accessToken
-      const userId = session.userId
+      if (isTokenExpired) return
 
       if (accessToken && recentTracks && userId) {
         const artistIds = recentTracks.map(track => track.artistId)
@@ -67,12 +65,12 @@ export default function Home() {
       }
     }
     fetchSongData()
-  }, [recentTracks, isTokenExpired])
+  }, [recentTracks, accessToken, userId, isTokenExpired])
 
   useEffect(() => {
     const giveRecommendations = async () => {
-      if (session?.userId && recentTracks) {
-        const preferences: Preference = await getPreferences(session.userId)
+      if (userId && recentTracks) {
+        const preferences: Preference = await getPreferences(userId)
         const avg = calcAvgFeaturesOfListeningHistory(recentTracks)
         if (avg && songData) {
           const songRecommendations: Track[] = calcRecommendedSongs(songData, recentTracks, avg, [preferences], preferences.apply)
