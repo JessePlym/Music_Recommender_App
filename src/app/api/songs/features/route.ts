@@ -3,7 +3,9 @@ import clientPromise from "@/lib/mongo"
 import { validatePreferences } from "@/lib/functions/validate"
 
 export async function POST(request: NextRequest) {
+
   const songPreference: Preference = await request.json()
+
   if (!songPreference) return
   const url = new URL(request.url)
   const userId = url.searchParams.get("id")

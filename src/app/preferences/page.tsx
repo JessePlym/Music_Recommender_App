@@ -3,9 +3,10 @@
 import { FormEvent, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { getPreferences } from "@/lib/requests/getPreferences"
-import { sendPreferences } from "@/lib/server/actions"
+import { savePreferences } from "@/lib/server/actions"
 import useWindowSize from "../hooks/useWindowSize"
 import useAuth from "../hooks/useAuth"
+import { useFormStatus } from "react-dom"
 
 const KEYS = ["C", "C#/D♭", "D", "D#/E♭", "E", "F", "F#/G♭", "G", "G#/A♭", "A", "A#/B♭", "B"]
 
@@ -22,7 +23,7 @@ export default function Preferences() {
   const { userId } = useAuth()
   const [ preference, setPreference ] = useState<Preference>(initPreference)
   const [ buttonLabel, setButtonLabel] = useState(preference.apply ? "Don't apply" : "Apply")
-  const router = useRouter()
+  const { pending } = useFormStatus()
   const { width } = useWindowSize()
 
   const mobile = width < 450
@@ -48,18 +49,19 @@ export default function Preferences() {
     }
   }
 
-  // const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault()
-  //   if (session?.userId) {
-  //     await sendPreferences(preference, session?.userId)
-  //     router.push("/")
-  //   }
-  // }
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const formData = new FormData(e.currentTarget)
+
+    if (userId) {
+      formData.append("userId", userId)
+    }
+  }
+
   return (
     <div className="flex justify-center">
       <main className={`bg-slate-950 m-5 z-20 shadow-xl border border-white/80 p-2 flex flex-col md:w-1/2 w-full justify-center items-center ${mobile && "text-2xl"}`}>
         <h2 className={`${mobile && "text-lg"}`}>Select your musical preferences</h2>
-        <form className={`flex flex-col ${mobile ? "gap-8" : "gap-4"} mt-4 w-full items-center p-2`} action={sendPreferences}>
+        <form className={`flex flex-col ${mobile ? "gap-8" : "gap-4"} mt-4 w-full items-center p-2`} action={savePreferences} onSubmit={handleSubmit}>
         <div className="flex w-full justify-between items-center">
             <label htmlFor="key">Key</label>
             <select 
@@ -137,7 +139,20 @@ export default function Preferences() {
               Minor
             </label>
           </div>
-          <button className="border-2 border-transparent z-20 rounded py-2 px-5 bg-teal-700 hover:bg-teal-800 w-fit text-3xl" type="submit">Save</button>
+          <div>
+            <input 
+              hidden
+              value={userId ?? ""}
+              name="userId"
+            />
+          </div>
+          <button 
+            className="border-2 border-transparent z-20 rounded py-2 px-5 bg-teal-700 hover:bg-teal-800 w-fit text-3xl" 
+            type="submit"
+            disabled={pending}
+          >
+            Save
+          </button>
         </form>
         <button className="border-2 border-transparent z-20 rounded py-2 px-3.5 bg-teal-700 hover:bg-teal-800 w-fit text-3xl" onClick={handlePreferences}>{buttonLabel}</button>
       </main>
