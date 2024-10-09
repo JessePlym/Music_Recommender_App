@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getTrackFeatures } from "@/lib/functions/getTrackFeatures"
-import { getTracksFromMongo } from "@/lib/functions/getDataFromMongo"
-import { getTokenFromJWT, getUserIdFromRequestParams } from "@/lib/functions/getRequestParams"
-import { saveTracksToMongo } from "@/lib/functions/saveDataToMongo"
+import { getTokenFromJWT } from "@/lib/functions/getRequestParams"
+
 
 const SPOTIFY_DATA_SOURCE_URL = "https://api.spotify.com/v1"
 const LIMIT = 50
@@ -15,21 +14,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ "message": "No Token"})
   }
 
-  const userId = getUserIdFromRequestParams(request)
-
-  if (!userId) {
-    return NextResponse.json({ "message": "No User id provided"})
-  }
-
-  let tracks = await getTracksFromMongo(userId, "recent")
-
-  if (tracks) {
-    return NextResponse.json(tracks)
-  }
-
-  /**
-   * If no tracks received from mongo, begin fetching from Spotify API
-   */
+  let tracks: Track[] = []
 
   try {
     const response = await fetch(`${SPOTIFY_DATA_SOURCE_URL}/me/player/recently-played?before=${Date.now()}&limit=${LIMIT}`, {
@@ -43,7 +28,6 @@ export async function GET(request: NextRequest) {
       const data = await response.json()
       tracks = filterDuplicateTracks(data.items)
       await getTrackFeatures(tracks, token)
-      await saveTracksToMongo(tracks, "recent", userId)
       return NextResponse.json(tracks)
     } else {
       return NextResponse.json({ "status": response.status})

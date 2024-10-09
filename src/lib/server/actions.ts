@@ -1,6 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+import { validatePreferences } from "../functions/validate"
 
 import clientPromise from "../mongo"
 
@@ -22,7 +23,9 @@ export async function savePreferences(userId: string, preferenceData: FormData) 
   songPreference.mode = Number(preferenceData.get("mode"))
   songPreference.apply = Boolean(preferenceData.get("apply"))
 
-  console.log(userId)
+  const valid = validatePreferences(songPreference)
+
+  if (!valid) return
 
   try {
     const client = await clientPromise
