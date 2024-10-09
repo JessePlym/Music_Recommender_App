@@ -1,18 +1,17 @@
 "use client"
 
 import { deleteUserData } from "@/lib/requests/deleteAllData"
-import { getSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import useAuth from "../hooks/useAuth"
 
 export default function DeleteData() {
   const [message, setMessage] = useState("")
   const router = useRouter()
+  const { userId } = useAuth()
 
   const handleClick = async () => {
     if (confirm("Are you sure?")) {
-      const session = await getSession()
-      const userId = session ? session?.userId : null
       if (userId) {
         const response = await deleteUserData(userId)
         setMessage(response)

@@ -2,10 +2,10 @@
 
 import { FormEvent, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { useSession } from "next-auth/react"
 import { getPreferences } from "@/lib/requests/getPreferences"
 import { sendPreferences } from "@/lib/server/actions"
 import useWindowSize from "../hooks/useWindowSize"
+import useAuth from "../hooks/useAuth"
 
 const KEYS = ["C", "C#/D♭", "D", "D#/E♭", "E", "F", "F#/G♭", "G", "G#/A♭", "A", "A#/B♭", "B"]
 
@@ -19,7 +19,7 @@ const initPreference: Preference = {
 }
 
 export default function Preferences() {
-  const { data: session } = useSession()
+  const { userId } = useAuth()
   const [ preference, setPreference ] = useState<Preference>(initPreference)
   const [ buttonLabel, setButtonLabel] = useState(preference.apply ? "Don't apply" : "Apply")
   const router = useRouter()
@@ -29,14 +29,14 @@ export default function Preferences() {
 
   useEffect(() => {
     const fetchPreferences = async () => {
-      if (session?.userId) {
-        const preferences = await getPreferences(session.userId)
+      if (userId) {
+        const preferences = await getPreferences(userId)
         setButtonLabel(preferences.apply ? "Don't apply" : "Apply")
         setPreference(preferences)
       }
     }
     fetchPreferences()
-  }, [session?.userId])
+  }, [userId])
 
   const handlePreferences = () => {
     if (buttonLabel === "Apply") {

@@ -1,6 +1,6 @@
 "use client"
 
-import { getSession, useSession } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import Player from "./components/Player"
 import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
@@ -15,7 +15,7 @@ import useWindowSize from "./hooks/useWindowSize"
 import useAuth from "./hooks/useAuth"
 
 export default function Home() {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const { userId, accessToken, expires_at } = useAuth()
   const [recentTracks, setRecentTracks] = useState<Track[] | null>(null)
   const [songData, setSongData] = useState<Track[] | null>(null)
@@ -80,7 +80,7 @@ export default function Home() {
     }
 
     giveRecommendations()
-  }, [recentTracks, songData, session?.userId])
+  }, [recentTracks, songData, userId])
 
   const handlePlayingTrack = (uri: string) => {
     setPlayingTrack(uri)
@@ -113,8 +113,8 @@ export default function Home() {
             </article>
           </section>
           <section className=" bg-slate-950 z-20 sticky bottom-0 shadow-xl border border-white/80 p-2 flex justify-center">
-            { (status === "authenticated" && session.accessToken && recentTracks) ? 
-                <Player accessToken={session?.accessToken} trackUri={playingTrack} recentTracks={recentTracks} />
+            { (status === "authenticated" && accessToken && recentTracks) ? 
+                <Player accessToken={accessToken} trackUri={playingTrack} recentTracks={recentTracks} />
               : null
             }
           </section>
