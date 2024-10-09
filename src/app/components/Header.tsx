@@ -1,13 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
 import { FaWrench, FaSignOutAlt } from "react-icons/fa"
 import useWindowSize from "../hooks/useWindowSize"
 import { FaTrashCan } from "react-icons/fa6"
 
 export default function Header() {
-  const [searchInput, setSearchInput] = useState("")
   const { width } = useWindowSize()
 
   return (
@@ -18,27 +16,19 @@ export default function Header() {
         </h1>
         : <h1></h1>
       }
-      <nav className="mx-10 sm:w-1/2 w-5/6 flex items-center h-full justify-between">
-        <form className="lg:w-1/2 w-full hidden md:block" onSubmit={e => e.preventDefault()}>
-          <input
-            className="text-2xl h-full p-2 rounded-lg text-black w-full focus:outline-none focus:border-1 border border-teal-500"
-            type="text"
-            name="search"
-            value={searchInput}
-            placeholder="Search"
-            onChange={e => setSearchInput(e.target.value)}
-          />
-        </form>
+      <nav className="mx-10 sm:w-1/2 w-5/6 flex items-center h-full">
         { width > 1100 ? 
-          <div className="flex gap-6 items-center">
-            <Link className="hover:text-slate-300" href="/">Home</Link>
-            <Link href="/preferences">
-              <FaWrench />
+          <div className="flex gap-10 items-end">
+            <Link className="hover:text-slate-300" href="/">
+              Home
             </Link>
-            <Link href="/api/auth/signout">
-              <FaSignOutAlt />
+            <Link className="hover:text-slate-300" href="/preferences">
+              Preferences
             </Link>
-            <Link href="/user-data">
+            <Link className="hover:text-slate-300" href="/api/auth/signout">
+              Sign Out
+            </Link>
+            <Link className="hover:text-slate-300" href="/user-data">
               <FaTrashCan />
             </Link>
           </div>
