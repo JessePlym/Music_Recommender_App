@@ -36,27 +36,3 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(defaultPreferences)
   }
 }
-
-export async function DELETE(request: NextRequest) {
-
-  const userId = getUserIdFromRequestParams(request)
-
-  if (!userId) {
-    return NextResponse.json({ "message": "No User id provided"})
-  }
-
-  try {
-    const client = await clientPromise
-    const db = client.db("MusicDB")
-
-    await db.collection("songs").deleteOne({ "id": userId})
-    await db.collection("recent").deleteOne({ "id": userId})
-    await db.collection("preferences").deleteOne({ "id": userId})
-
-    return NextResponse.json({ "message": "deleted"})
-
-  } catch (err) {
-    return NextResponse.json({ status: 500})
-  }
-
-}

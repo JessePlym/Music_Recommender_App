@@ -26,7 +26,7 @@ export default function Player({ accessToken, trackUri, recentTracks}: Props) {
       token={accessToken}
       showSaveIcon
       callback={state => {
-        if (!state.isPlaying) setPlay(false)
+        if (state && !state.isPlaying) setPlay(false)
       }}
       play={play}
       uris={trackUri ? [trackUri] : recentTrackUris}
