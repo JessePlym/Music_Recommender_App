@@ -1,6 +1,6 @@
 "use client"
 
-import { deleteUserData } from "@/lib/requests/deleteAllData"
+import { deleteUserData } from "@/lib/server/actions"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import useAuth from "../hooks/useAuth"

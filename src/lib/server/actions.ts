@@ -48,4 +48,25 @@ export async function savePreferences(userId: string, preferenceData: FormData) 
     console.log(err)
   }
 
-} 
+}
+
+export async function deleteUserData(userId: string) {
+
+  let message = ""
+
+  try {
+    const client = await clientPromise
+    const db = client.db("MusicDB")
+
+    await db.collection("songs").deleteOne({ "id": userId})
+    await db.collection("preferences").deleteOne({ "id": userId})
+
+    message = "User data deleted successfully"
+
+  } catch (err) {
+    message = "Could not delete data"
+  } finally {
+    console.log(message)
+    return message
+  }
+}

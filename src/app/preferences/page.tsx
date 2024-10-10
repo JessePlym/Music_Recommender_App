@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-//import { useRouter } from "next/navigation"
 import { getPreferences } from "@/lib/requests/getPreferences"
 import { savePreferences } from "@/lib/server/actions"
 import useWindowSize from "../hooks/useWindowSize"
@@ -134,6 +133,7 @@ export default function Preferences() {
             className="border-2 border-transparent z-20 rounded py-2 px-5 bg-teal-700 hover:bg-teal-800 w-fit text-3xl" 
             type="submit"
             disabled={pending}
+            onClick={e => e.currentTarget.innerHTML = "Saved"}
           >
             Save
           </button>
