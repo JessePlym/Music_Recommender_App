@@ -75,10 +75,13 @@ export function calcRecommendedSongs(tracks: Track[], listeningHistory: Track[],
   }
 
   /**
-   * Find top 5 most similar songs to recommend
+   * Find most similar songs to recommend
+   * Number of songs to be recommended are based on user's choice
    */
 
-  while (recommendedSongs.length < 5 && distanceMap.size !== 0) {
+  const numberOfSuggestions = applyPreferences ? userPreferences[0].suggestions ?? 5 : 5
+
+  while (recommendedSongs.length < numberOfSuggestions && distanceMap.size !== 0) {
     const recommendedSongId = findMostSimilar(distanceMap)
 
     if (recommendedSongId !== undefined) {
@@ -103,6 +106,8 @@ export function calcRecommendedSongs(tracks: Track[], listeningHistory: Track[],
    */
 
   const sortedSongs = recommendedSongs.sort((a: Track, b: Track) => b.popularity - a.popularity)
+
+  console.log("function finished")
 
   return sortedSongs
 

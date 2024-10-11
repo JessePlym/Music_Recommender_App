@@ -33,6 +33,7 @@ type Preference = {
   isInstrumental: boolean,
   tempo: number,
   mode: number,
+  suggestions: number,
   apply: boolean
 }
 

@@ -13,6 +13,7 @@ export async function savePreferences(userId: string, preferenceData: FormData) 
     isInstrumental: false,
     tempo: 0,
     mode: 0,
+    suggestions: 5,
     apply: false
   }
 
@@ -21,6 +22,7 @@ export async function savePreferences(userId: string, preferenceData: FormData) 
   songPreference.isAcoustic = Boolean(preferenceData.get("acoustic"))
   songPreference.isInstrumental = Boolean(preferenceData.get("instrumental"))
   songPreference.mode = Number(preferenceData.get("mode"))
+  songPreference.suggestions = Number(preferenceData.get("suggestions"))
   songPreference.apply = Boolean(preferenceData.get("apply"))
 
   const valid = validatePreferences(songPreference)

@@ -15,6 +15,7 @@ const initPreference: Preference = {
   isInstrumental: false,
   tempo: 100,
   mode: 0,
+  suggestions: 5,
   apply: false
 }
 
@@ -118,6 +119,22 @@ export default function Preferences() {
               Minor
             </label>
           </div>
+          <div className="flex w-full justify-between items-center">
+            <label htmlFor="suggestions">How many suggestions</label>
+            <select 
+              className={`text-black w-20 ${mobile && "text-3xl"}`}
+              name="suggestions"
+              id="suggestions"
+              value={preference.suggestions}
+              onChange={e => setPreference({...preference, suggestions: Number(e.target.value)})}
+            >
+              {
+                [...Array(10).keys()].map(i => i + 1).map(number => (
+                  <option key={number} value={number} defaultValue={5}>{number}</option>
+                )) 
+              }
+            </select>
+          </div>
           <div className="flex w-full justify-between items-center mt-8 mb-4">
             <label htmlFor="apply">Apply these for suggestions</label>
             <input
@@ -133,7 +150,7 @@ export default function Preferences() {
             className="border-2 border-transparent z-20 rounded py-2 px-5 bg-teal-700 hover:bg-teal-800 w-fit text-3xl" 
             type="submit"
             disabled={pending}
-            onClick={e => e.currentTarget.innerHTML = "Saved"}
+            onClick={e => e.currentTarget.textContent = "Saved"}
           >
             Save
           </button>
