@@ -14,12 +14,16 @@ type Album = {
   ]
 }
 
+type Artist = {
+  id: string,
+  name: string,
+  genres: string[]
+}
+
 type Track = {
   id: string,
   name: string,
-  genre?: string | null,
-  artist: string,
-  artistId: string,
+  artist: Artist
   album?: Album,
   albumName: string,
   uri: string,
@@ -47,7 +51,7 @@ type Feature = {
 }
 
 type AverageSongFeature = {
-  artist: string,
+  artistName: string,
   albumName: string
   acousticness: number,
   danceability: number,

@@ -22,7 +22,7 @@ export function calcRecommendedSongs(tracks: Track[], listeningHistory: Track[],
     * if values are same the difference is 0, otherwise 1
     */
 
-    const artistDiff = track.artist !== avgFeatures.artist ? 1 : 0
+    const artistDiff = track.artist.name !== avgFeatures.artistName ? 1 : 0
     const albumDiff = track.albumName !== avgFeatures.albumName ? 1 : 0
     const keyDiff = track.features.key !== avgFeatures.key ? 1 : 0
     const modeDiff = track.features.mode !== avgFeatures.mode ? 1 : 0

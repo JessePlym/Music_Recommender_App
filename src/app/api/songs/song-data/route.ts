@@ -94,8 +94,7 @@ async function queryTracksFromArtists(artists: string[], accessToken: string) {
             tracks.push({
               name: item.name,
               id: item.id,
-              artist: item.artists[0].name,
-              artistId: item.artists[0].id,
+              artist: item.artists[0],
               albumName: item.album.name,
               album: item.album,
               uri: item.uri,
