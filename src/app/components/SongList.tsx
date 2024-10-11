@@ -19,7 +19,7 @@ export default function SongList({ tracks, handlePlayingTrack, mobile }: Props) 
           />
           <div>
             <button onClick={() => handlePlayingTrack(track?.uri ?? "")}><p className="hover:text-white/80">{track?.name}</p></button>
-            <p className={`${mobile ? "text-xs" : "text-base"}`}>{track?.artist}</p>
+            <p className={`${mobile ? "text-xs" : "text-base"}`}>{track?.artist.name}</p>
           </div>
         </li>
       ))}

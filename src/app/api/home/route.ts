@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
     isInstrumental: false,
     tempo: 100,
     mode: 0,
+    suggestions: 5,
     apply: false
   }
 

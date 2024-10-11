@@ -22,7 +22,7 @@ export function calcRecommendedSongs(tracks: Track[], listeningHistory: Track[],
     * if values are same the difference is 0, otherwise 1
     */
 
-    const artistDiff = track.artist !== avgFeatures.artist ? 1 : 0
+    const artistDiff = track.artist.name !== avgFeatures.artistName ? 1 : 0
     const albumDiff = track.albumName !== avgFeatures.albumName ? 1 : 0
     const keyDiff = track.features.key !== avgFeatures.key ? 1 : 0
     const modeDiff = track.features.mode !== avgFeatures.mode ? 1 : 0
@@ -75,10 +75,13 @@ export function calcRecommendedSongs(tracks: Track[], listeningHistory: Track[],
   }
 
   /**
-   * Find top 5 most similar songs to recommend
+   * Find most similar songs to recommend
+   * Number of songs to be recommended are based on user's choice
    */
 
-  while (recommendedSongs.length < 5 && distanceMap.size !== 0) {
+  const numberOfSuggestions = applyPreferences ? userPreferences[0].suggestions ?? 5 : 5
+
+  while (recommendedSongs.length < numberOfSuggestions && distanceMap.size !== 0) {
     const recommendedSongId = findMostSimilar(distanceMap)
 
     if (recommendedSongId !== undefined) {
@@ -103,6 +106,8 @@ export function calcRecommendedSongs(tracks: Track[], listeningHistory: Track[],
    */
 
   const sortedSongs = recommendedSongs.sort((a: Track, b: Track) => b.popularity - a.popularity)
+
+  console.log("function finished")
 
   return sortedSongs
 

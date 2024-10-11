@@ -1,5 +1,5 @@
 type avgFeatures = {
-  artist: string,
+  artistName: string,
   albumName: string,
   key: number,
   acousticness: number,
@@ -41,12 +41,12 @@ export function calcAvgFeaturesOfListeningHistory(tracks: Track[] | null) {
 
     const albumName = tracks[i].albumName
     const key = tracks[i].features.key
-    const artist = tracks[i].artist
+    const artistName = tracks[i].artist.name
     const mode = tracks[i].features.mode
 
     mostCommonAlbumMap.set(albumName, (mostCommonAlbumMap.get(albumName) || 0) + 1)
     mostCommonKeyMap.set(key, (mostCommonKeyMap.get(key) || 0) + 1)
-    mostCommonArtistMap.set(artist, (mostCommonArtistMap.get(artist) || 0) + 1)
+    mostCommonArtistMap.set(artistName, (mostCommonArtistMap.get(artistName) || 0) + 1)
     mostCommonModeMap.set(mode, (mostCommonModeMap.get(mode) || 0) + 1)
 
   }
@@ -58,7 +58,7 @@ export function calcAvgFeaturesOfListeningHistory(tracks: Track[] | null) {
     instrumentalness: sumOfTrackFeatures.totalInstrumentalness / tracklistLength,
     tempo: sumOfTrackFeatures.totalTempo / tracklistLength,
     mode: 0,
-    artist: "",
+    artistName: "",
     albumName: "",
     key: -1
   }
@@ -77,7 +77,7 @@ export function calcAvgFeaturesOfListeningHistory(tracks: Track[] | null) {
   }
 
   avgFeatures.albumName = findMostCommon(mostCommonAlbumMap)
-  avgFeatures.artist = findMostCommon(mostCommonArtistMap)
+  avgFeatures.artistName = findMostCommon(mostCommonArtistMap)
   avgFeatures.key = Number(findMostCommon(mostCommonKeyMap))
   avgFeatures.mode = Number(findMostCommon(mostCommonModeMap))
 

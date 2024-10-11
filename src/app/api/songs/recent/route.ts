@@ -54,8 +54,7 @@ function filterDuplicateTracks(items: any) {
       id: item.track.id,
       album: item.track.album,
       albumName: item.track.album.name,
-      artist: item.track.album.artists[0].name,
-      artistId: item.track.album.artists[0].id,
+      artist: item.track.album.artists[0],
       popularity: item.track.popularity,
       uri: item.track.uri,
       features: {
