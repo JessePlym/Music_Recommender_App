@@ -14,15 +14,22 @@ export function calcRecommendedSongs(tracks: Track[], listeningHistory: Track[],
   }
   
   const distanceMap = new Map<string, number>()
+
+  const topArtist = findArtistByArtistName(avgFeatures.artistName, listeningHistory)
+  const topArtistsGenres: string[] = topArtist ? topArtist.genres : listeningHistory[0].artist.genres
   
   for (const track of tracks) {
 
    /** 
-    * Attributes artist, album and key must be converted to numbers between 0-1
+    * Artists similarity is calculated by its genres
+    * Album and key must be converted to numbers between 0-1
     * if values are same the difference is 0, otherwise 1
     */
 
-    const artistDiff = track.artist.name !== avgFeatures.artistName ? 1 : 0
+    const genreDistance = topArtistsGenres.reduce((count, topGenre) => {
+      return track.artist.genres.find(trackGenre => trackGenre === topGenre) ? count : count + 1
+    }, 0)
+    const artistDiff = genreDistance / topArtistsGenres.length
     const albumDiff = track.albumName !== avgFeatures.albumName ? 1 : 0
     const keyDiff = track.features.key !== avgFeatures.key ? 1 : 0
     const modeDiff = track.features.mode !== avgFeatures.mode ? 1 : 0
@@ -51,28 +58,6 @@ export function calcRecommendedSongs(tracks: Track[], listeningHistory: Track[],
   }
 
   const recommendedSongs: Track[] = []
-
-  // find track with shortest distance helper function
-
-  function findMostSimilar(map: Map<string, number>) {
-    if (!map.size) return
-    const lowestValue = Math.min(...map.values())
-    for (const [key, value] of map) {
-      if (value === lowestValue) {
-        return key
-      }
-    }
-    return [...map.keys()][0]
-  }
-
-  function isSongInListeningHistory(tracks: Track[], trackId: string) {
-    for (const track of tracks) {
-      if (track.id === trackId) {
-        return true
-      }
-    }
-    return false
-  }
 
   /**
    * Find most similar songs to recommend
@@ -107,8 +92,31 @@ export function calcRecommendedSongs(tracks: Track[], listeningHistory: Track[],
 
   const sortedSongs = recommendedSongs.sort((a: Track, b: Track) => b.popularity - a.popularity)
 
-  console.log("function finished")
-
   return sortedSongs
 
+}
+
+function findArtistByArtistName(name: string, tracks: Track[]) {
+   return tracks.find(track => track.artist.name === name)?.artist
+}
+
+// find track with shortest distance helper function
+function findMostSimilar(map: Map<string, number>) {
+  if (!map.size) return
+  const lowestValue = Math.min(...map.values())
+  for (const [key, value] of map) {
+    if (value === lowestValue) {
+      return key
+    }
+  }
+  return [...map.keys()][0]
+}
+
+function isSongInListeningHistory(tracks: Track[], trackId: string) {
+  for (const track of tracks) {
+    if (track.id === trackId) {
+      return true
+    }
+  }
+  return false
 }

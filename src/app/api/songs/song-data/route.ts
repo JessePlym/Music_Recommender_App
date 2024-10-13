@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
 
 function findItemsWithHighestPopularity(items: Item[]) {
   const highestPopularityArtists = items.sort((a: Item, b: Item) => b.popularity - a.popularity)
-  return highestPopularityArtists.slice(0, 5) 
+  return highestPopularityArtists.slice(0, 5)
 }
 
 async function queryTracksFromArtists(artists: string[], accessToken: string) {
