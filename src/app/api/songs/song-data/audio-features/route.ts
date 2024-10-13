@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
     await saveTracksToMongo(tracks, collection, userId)
     console.log("saved to mongo")
   } else {
+    console.log("Did not save")
     await getTrackFeatures(tracks, token)
   }
 

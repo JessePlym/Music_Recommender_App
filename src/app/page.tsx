@@ -59,7 +59,7 @@ export default function Home() {
         const artistIds = recentTracks.map(track => track.artist.id)
         const uniqueIds = new Set<string>()
         artistIds.forEach(id => uniqueIds.add(id))
-        const topArtistIds = [...uniqueIds.values()]
+        const topArtistIds = [...uniqueIds.values()].slice(0, 30)
         const songData = await getSongData(accessToken, topArtistIds, userId)
         setSongData(songData ?? [])
       }
