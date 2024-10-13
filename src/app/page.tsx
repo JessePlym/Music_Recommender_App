@@ -59,7 +59,7 @@ export default function Home() {
         const artistIds = recentTracks.map(track => track.artist.id)
         const uniqueIds = new Set<string>()
         artistIds.forEach(id => uniqueIds.add(id))
-        const topArtistIds = [...uniqueIds.values()].slice(0, 15)
+        const topArtistIds = [...uniqueIds.values()]
         const songData = await getSongData(accessToken, topArtistIds, userId)
         setSongData(songData ?? [])
       }
@@ -107,8 +107,12 @@ export default function Home() {
             </article>
             <article className={`${mobile ? "border-b" : "border-l items-center"} border-white p-2 flex flex-col justify-start gap-2`}>
               <h2>Song Suggestions</h2>
-              {(recommendedSongs === null || recommendedSongs.length === 0) ? <Spinner /> :
-                < SongList tracks={recommendedSongs} handlePlayingTrack={handlePlayingTrack} mobile={mobile}/>
+              {(recommendedSongs === null || recommendedSongs.length === 0) 
+                ? <>
+                    <Spinner /> 
+                    <h3 className="text-xl">Calculating suggestions</h3>
+                  </>
+                : < SongList tracks={recommendedSongs} handlePlayingTrack={handlePlayingTrack} mobile={mobile}/>
               }
             </article>
           </section>
