@@ -43,11 +43,11 @@ export async function savePreferences(userId: string, preferenceData: FormData) 
     const options = { upsert: true}
   
     await collection.updateOne(filter, payload, options)
-
-    revalidatePath("/preferences")
-
+    
   } catch (err) {
     console.log(err)
+  } finally {
+    revalidatePath("/preferences")
   }
 
 }

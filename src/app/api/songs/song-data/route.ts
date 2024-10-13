@@ -1,3 +1,4 @@
+import { getArtistGenres } from "@/lib/functions/getArtistGenres"
 import { getTracksFromMongo } from "@/lib/functions/getDataFromMongo"
 import { getTokenFromJWT, getUserIdFromRequestParams } from "@/lib/functions/getRequestParams"
 import { NextRequest, NextResponse } from "next/server"
@@ -65,7 +66,22 @@ export async function POST(request: NextRequest) {
   console.log("artists received: " + (Date.now() - start) + "ms")
   const queriedTracks = await queryTracksFromArtists(receivedArtists, token)
   console.log("Tracks queried: " + (Date.now() - start) + "ms")
-  return NextResponse.json({tracks: queriedTracks, dataFromMongo: false})
+
+  /**
+   * Fetch genres in batches of 50 artists
+   */
+
+  let tracksWithGenres: Track[] = []
+  for (let i = 0; i < queriedTracks.length; i = i + 50) {
+    const partialTracks = queriedTracks.slice(i, i + 50)
+    const partialTracksWithGenres = await getArtistGenres(partialTracks, token)
+    if (partialTracksWithGenres) {
+      tracksWithGenres = [...tracksWithGenres, ...partialTracksWithGenres]
+    }
+  }
+  console.log("Genres received: " + (Date.now() - start) + "ms")
+
+  return NextResponse.json({tracks: tracksWithGenres, dataFromMongo: false})
 }
 
 function findItemsWithHighestPopularity(items: Item[]) {

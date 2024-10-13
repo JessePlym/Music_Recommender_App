@@ -10,8 +10,8 @@ type AudioFeature = {
   tempo: number
 }
 
-export async function getTrackFeatures(tracks: Track[], accessToken: string) {
-  if (tracks.length === 0) return
+export async function getTrackFeatures(tracks: Track[] | undefined, accessToken: string) {
+  if (tracks === undefined || tracks.length === 0) return
 
   const trackIds = tracks.map(track => track.id)
   const trackIdsString = trackIds.join(",")

@@ -37,11 +37,13 @@ export default function Preferences() {
     fetchPreferences()
   }, [userId])
 
+  const savePreferencesWithUser = savePreferences.bind(null, userId ?? "")
+
   return (
     <div className="flex justify-center">
       <main className={`bg-slate-950 m-5 z-20 shadow-xl border border-white/80 p-2 flex flex-col md:w-1/2 w-full justify-center items-center ${mobile && "text-2xl"}`}>
         <h2 className={`${mobile && "text-lg"}`}>Select your musical preferences</h2>
-        <form className={`flex flex-col ${mobile ? "gap-8" : "gap-4"} mt-4 w-full items-center p-2`} action={savePreferences.bind(null, userId ?? "")}>
+        <form className={`flex flex-col ${mobile ? "gap-8" : "gap-4"} mt-4 w-full items-center p-2`} action={savePreferencesWithUser}>
         <div className="flex w-full justify-between items-center">
             <label htmlFor="key">Key</label>
             <select 
