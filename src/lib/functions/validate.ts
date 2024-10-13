@@ -3,6 +3,8 @@ export function validatePreferences(songPreference: Preference): boolean {
   let validKey = false
   let tempo = songPreference.tempo
   let validTempo = false
+  const suggestionCount = songPreference.suggestions
+  let validSuggestionCount = false
 
   if (tempo > 200) {
     songPreference.tempo = 200
@@ -18,10 +20,9 @@ export function validatePreferences(songPreference: Preference): boolean {
   if (!Number.isNaN(key) && key >= -1 && key <= 11) {
     validKey = true
   }
-
-  if (validKey && validTempo) {
-    return true
-  } else {
-    return false
+  if (!Number.isNaN(suggestionCount) && suggestionCount >= 1 && suggestionCount <= 10) {
+    validSuggestionCount = true
   }
+
+  return validKey && validTempo && validSuggestionCount
 }
