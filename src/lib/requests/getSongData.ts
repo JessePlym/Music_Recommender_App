@@ -79,8 +79,6 @@ async function addAudioFeatures(accessToken: string, tracks: Track[], saveToMong
       ? { tracks: tracks, saveToMongo: saveToMongo, collection: "songs", userId: userId}
       : { tracks: tracks}
 
-    console.log(payload)
-
     try {
       const response = await fetch(`${HOSTNAME}/api/songs/song-data/audio-features`, {
         method: "POST",

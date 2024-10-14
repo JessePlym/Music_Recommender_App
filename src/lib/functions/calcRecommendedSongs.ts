@@ -1,4 +1,10 @@
-export function calcRecommendedSongs(tracks: Track[], listeningHistory: Track[], avgFeatures: AverageSongFeature, userPreferences: Preference[], applyPreferences: boolean) {
+export function calcRecommendedSongs(
+  tracks: Track[], 
+  listeningHistory: Track[], 
+  avgFeatures: AverageSongFeature, 
+  userPreferences: Preference[], 
+  applyPreferences: boolean
+) {
 
   /**
    * Users own preferences override average features based on listening history
