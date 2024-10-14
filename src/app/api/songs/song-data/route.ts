@@ -41,28 +41,14 @@ export async function POST(request: NextRequest) {
 
   const start = Date.now()
   
-  for (const artistId of topArtistIds) {
-    try {
-      const response = await fetch(`${SPOTIFY_DATA_SOURCE_URL}/artists/${artistId}/related-artists`, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      })
-      
-      if (response.ok) {
-       const data = await response.json()
-       const relatedArtists: Item[] = findItemsWithHighestPopularity(data.artists)
-       relatedArtists.forEach(artist => receivedArtists.push(artist.name))
-      } else {
-        return NextResponse.json({ "status": response.status})
-      }
-    } catch (err) {
-      const tracks: Track[] = []
-      console.log(err)
-      return NextResponse.json(tracks)
-    }
+  const relatedArtists = await findRelatedArtists(topArtistIds, token)
+  
+  if (relatedArtists) {
+    relatedArtists.forEach(artist => receivedArtists.push(artist.name))
+  } else {
+    return NextResponse.json({ "message": "No artists found"})
   }
+  
   console.log("artists received: " + (Date.now() - start) + "ms")
   const queriedTracks = await queryTracksFromArtists(receivedArtists, token)
   console.log("Tracks queried: " + (Date.now() - start) + "ms")
@@ -82,6 +68,39 @@ export async function POST(request: NextRequest) {
   console.log("Genres received: " + (Date.now() - start) + "ms")
 
   return NextResponse.json({tracks: tracksWithGenres, dataFromMongo: false})
+}
+
+async function findRelatedArtists(topArtistIds: string[], token: string, depth: number = 1) {
+  if (depth === 0) {
+    return []
+  }
+
+  let allRelatedArtists: Item[] = []
+
+  for (const artistId of topArtistIds) {
+    try {
+      const response = await fetch(`${SPOTIFY_DATA_SOURCE_URL}/artists/${artistId}/related-artists`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+      
+      if (response.ok) {
+       const data = await response.json()
+       const relatedArtists: Item[] = findItemsWithHighestPopularity(data.artists)
+       allRelatedArtists = allRelatedArtists.concat(relatedArtists)
+
+       const relatedArtistsIds = relatedArtists.map(artist => artist.id)
+       const deeperRelatedArtists = await findRelatedArtists(relatedArtistsIds, token, depth - 1)
+       
+       allRelatedArtists = allRelatedArtists.concat(deeperRelatedArtists)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  return allRelatedArtists
 }
 
 function findItemsWithHighestPopularity(items: Item[]) {

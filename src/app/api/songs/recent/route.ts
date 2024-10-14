@@ -3,7 +3,6 @@ import { getTrackFeatures } from "@/lib/functions/getTrackFeatures"
 import { getTokenFromJWT } from "@/lib/functions/getRequestParams"
 import { getArtistGenres } from "@/lib/functions/getArtistGenres"
 
-
 const SPOTIFY_DATA_SOURCE_URL = "https://api.spotify.com/v1"
 const LIMIT = 50
 const secret = process.env.NEXTAUTH_SECRET as string
