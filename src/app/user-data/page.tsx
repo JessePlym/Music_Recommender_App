@@ -23,10 +23,10 @@ export default function DeleteData() {
     
   }
   return (
-    <main className={`bg-slate-950 w-5/6 z-20 mx-auto mt-5 shadow-xl border border-white/80 p-2 flex flex-col gap-5 justify-center items-center`}>
+    <section className={`bg-slate-950 w-full z-20 mt-5 shadow-xl border border-white/80 p-10 flex flex-col gap-5 justify-start items-center`}>
       <h2 className="text-2xl">Here you can delete all data collected from you</h2>
       <button className="border border-red-600 w-fit bg-red-600 py-2 px-2 rounded hover:bg-red-500" onClick={handleClick}>Delete Your Data</button>
       <p>{message}</p>
-    </main>
+    </section>
   )
 }

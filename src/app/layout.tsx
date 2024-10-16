@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 import "./globals.css"
-import AppProvider from "./context/AppProvider";
+import AppProvider from "./context/AppProvider"
 import Header from "./components/Header"
+import Player from "./components/Player"
 // import { DM_Sans } from "next/font/google"
 // import { NextFont } from "next/dist/compiled/@next/font";
 
@@ -20,12 +21,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+
   return (
     <html lang="en">
       <body className="relative max-h-screen bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 text-white w-full text-3xl">
         <AppProvider>
           <Header />
-          {children}
+          <main className={`h-full mx-4 sm:mx-10 grid grid-rows-[8fr,1fr] gap-2`}>
+            {children}
+            <section className=" bg-slate-950 z-20 sticky bottom-0 shadow-xl border border-white/80 p-2 flex justify-center">
+              <Player />
+            </section>
+          </main>
         </AppProvider>
       </body>
     </html>
