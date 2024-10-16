@@ -13,18 +13,17 @@ import { getSongData } from "@/lib/requests/getSongData"
 import Spinner from "./components/Spinner"
 import useWindowSize from "./hooks/useWindowSize"
 import useAuth from "./hooks/useAuth"
+import useTracks from "./hooks/useTracks"
+import usePlayer from "./hooks/usePlayer"
 
 export default function Home() {
+  const [fetching, isFetching] = useState(true)
   const { status } = useSession()
   const { userId, accessToken, expires_at } = useAuth()
-  const [recentTracks, setRecentTracks] = useState<Track[] | null>(null)
-  const [songData, setSongData] = useState<Track[] | null>(null)
-  const [playingTrack, setPlayingTrack] = useState("")
-  const [recommendedSongs, setRecommendedSongs] = useState<Track[] | null>(null)
-  const [fetching, isFetching] = useState(true)
+  const { setPlayingTrack } = usePlayer()
   const router = useRouter()
   const { width } = useWindowSize()
-
+  const { recentTracks, recommendedTracks, trackData, setRecentTracks, setRecommendedTracks, setTrackData} = useTracks()
   const mobile = width < 450
 
   const isTokenExpired = useMemo(() => expires_at ? Date.now() > expires_at : false, [expires_at])
@@ -49,7 +48,7 @@ export default function Home() {
       }
     }
     fetchRecentTracks()
-  }, [status, accessToken, userId, isTokenExpired])
+  }, [status, accessToken, userId, isTokenExpired, setRecentTracks])
 
   useEffect(() => {
     const fetchSongData = async () => {
@@ -61,26 +60,26 @@ export default function Home() {
         artistIds.forEach(id => uniqueIds.add(id))
         const topArtistIds = [...uniqueIds.values()].slice(0, 15)
         const songData = await getSongData(accessToken, topArtistIds, userId)
-        setSongData(songData ?? [])
+        setTrackData(songData ?? [])
       }
     }
     fetchSongData()
-  }, [recentTracks, accessToken, userId, isTokenExpired])
+  }, [recentTracks, accessToken, userId, isTokenExpired, setTrackData])
 
   useEffect(() => {
     const giveRecommendations = async () => {
       if (userId && recentTracks) {
         const preferences: Preference = await getPreferences(userId)
         const avg = calcAvgFeaturesOfListeningHistory(recentTracks)
-        if (avg && songData) {
-          const songRecommendations: Track[] = calcRecommendedSongs(songData, recentTracks, avg, [preferences], preferences.apply)
-          setRecommendedSongs(songRecommendations)
+        if (avg && trackData) {
+          const songRecommendations: Track[] = calcRecommendedSongs(trackData, recentTracks, avg, [preferences], preferences.apply)
+          setRecommendedTracks(songRecommendations)
         }
       }
     }
 
     giveRecommendations()
-  }, [recentTracks, songData, userId])
+  }, [recentTracks, trackData, userId, setRecommendedTracks])
 
   const handlePlayingTrack = (uri: string) => {
     setPlayingTrack(uri)
@@ -107,18 +106,18 @@ export default function Home() {
             </article>
             <article className={`${mobile ? "border-b" : "border-l items-center"} border-white p-2 flex flex-col justify-start gap-2`}>
               <h2>Song Suggestions</h2>
-              {(recommendedSongs === null || recommendedSongs.length === 0) 
+              {(recommendedTracks === null || recommendedTracks.length === 0) 
                 ? <>
                     <Spinner /> 
                     <h3 className="text-xl">Calculating suggestions</h3>
                   </>
-                : < SongList tracks={recommendedSongs} handlePlayingTrack={handlePlayingTrack} mobile={mobile}/>
+                : < SongList tracks={recommendedTracks} handlePlayingTrack={handlePlayingTrack} mobile={mobile}/>
               }
             </article>
           </section>
           <section className=" bg-slate-950 z-20 sticky bottom-0 shadow-xl border border-white/80 p-2 flex justify-center">
-            { (status === "authenticated" && accessToken && recentTracks) ? 
-                <Player accessToken={accessToken} trackUri={playingTrack} recentTracks={recentTracks} />
+            { (status === "authenticated") ? 
+                <Player />
               : null
             }
           </section>

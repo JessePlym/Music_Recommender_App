@@ -2,23 +2,18 @@
 
 import { useEffect, useState } from 'react'
 import SpotifyWebPlayer from 'react-spotify-web-playback'
+import useAuth from '../hooks/useAuth'
+import usePlayer from '../hooks/usePlayer'
 
-type Props = {
-  accessToken: string,
-  trackUri: string,
-  recentTracks?: Track[]
-}
-export default function Player({ accessToken, trackUri, recentTracks}: Props) {
+export default function Player() {
   const [play, setPlay] = useState(false)
-  const [recentTrackUris, setRecentTrackUris] = useState<string[]>([])
+  const { accessToken } = useAuth()
+  const { playingTrack: trackUri } = usePlayer() 
 
   useEffect(() => {
     setPlay(true) 
-    if (recentTracks) {
-      setRecentTrackUris(recentTracks.map(track => track ? track.uri : ""))
-    }
-  }, [trackUri, recentTracks])
-
+  }, [trackUri])
+  
   if (!accessToken) return null
 
   return (
@@ -29,7 +24,7 @@ export default function Player({ accessToken, trackUri, recentTracks}: Props) {
         if (state && !state.isPlaying) setPlay(false)
       }}
       play={play}
-      uris={trackUri ? [trackUri] : recentTrackUris}
+      uris={trackUri ? trackUri : []}
     />
   )
 }
