@@ -28,10 +28,15 @@ export default function Player() {
         }}
         play={play}
         uris={trackUri ? trackUri : []}
+        styles={{ bgColor: "#333", color: "white", sliderColor: "white", trackArtistColor: "white", trackNameColor: "white"}}
       />
     )
 
-    return player
+    return (
+      <section className=" bg-slate-950 bg-transparent z-20 sticky border bottom-0 shadow-x flex justify-center">
+        { player }
+      </section>
+    )
   }
 
   return null

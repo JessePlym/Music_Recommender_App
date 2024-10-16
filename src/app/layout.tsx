@@ -29,9 +29,7 @@ export default function RootLayout({
           <Header />
           <main className={`h-full mx-4 sm:mx-10 grid grid-rows-[8fr,1fr] gap-2`}>
             {children}
-            <section className=" bg-slate-950 z-20 sticky bottom-0 shadow-xl border border-white/80 p-2 flex justify-center">
-              <Player />
-            </section>
+            <Player />
           </main>
         </AppProvider>
       </body>
