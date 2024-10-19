@@ -21,6 +21,7 @@ Actual algoritm code can be found under `src/lib/functions`.
 ## 🎯 Prerequisites
 
 - [Spotify Account](https://open.spotify.com/) to create a Spotify account.
+- For full experience, Spotify Premium is recommended.
 - If you want to try out the music-recommender-app, please send me your email that is used in your Spotify Account. This is required for now, otherwise the app won't let you authorize.
 
 ## Screenshots
