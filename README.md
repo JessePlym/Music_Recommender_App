@@ -16,7 +16,7 @@ Actual algoritm code can be found under `src/lib/functions`.
 - **[Next.js](https://nextjs.org/)** - React framework with server-side rendering (SSR) and static site generation (SSG).
 - **[NextAuth.js](https://next-auth.js.org/)** - Authentication library for Next.js, using Spotify as an OAuth2 provider.
 - **[Spotify Web API](https://developer.spotify.com/documentation/web-api/)** - Fetch listening history and get song recommendations.
-- **React Context** - Manage authentication state globally.
+- **React Context** - Manage authentication and tracks state globally.
   
 ## 🎯 Prerequisites
 
